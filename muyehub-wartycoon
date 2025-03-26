@@ -6,9 +6,9 @@ Rayfield:Notify({
    Image = 140668304583375,
 })
 local Window = Rayfield:CreateWindow({
-   Name = "Tycoon Auto System",
-   LoadingTitle = "Auto System by notmuye",
-   LoadingSubtitle = "Auto Farm & Auto Buy",
+   Name = "War-tycoon",
+   LoadingTitle = "Script By notmuye.",
+   LoadingSubtitle = "Enjoy",
    Theme = "Default",
    ConfigurationSaving = {
       Enabled = true,
