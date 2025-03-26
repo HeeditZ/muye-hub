@@ -1,0 +1,339 @@
+-- Load Rayfield Library
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+-- Create the main window
+local Window = Rayfield:CreateWindow({
+   Name = "Muye-hub",
+   LoadingTitle = "Simple autofarm system by notmuye.",
+   LoadingSubtitle = "War tycoon",
+   Theme = "Default",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "TycoonSettings",
+      FileName = "TycoonConfig"
+   },
+})
+
+-- ================================
+-- SECTION: HELPER FUNCTIONS
+-- ================================
+local function getPlayerTycoon()
+    local tycoonFolder = workspace:FindFirstChild("Tycoon")
+    if not tycoonFolder then return nil end
+    local tycoonsFolder = tycoonFolder:FindFirstChild("Tycoons")
+    if not tycoonsFolder then return nil end
+    for _, tycoon in pairs(tycoonsFolder:GetChildren()) do
+        local owner = tycoon:FindFirstChild("Owner")
+        if owner and owner.Value == game.Players.LocalPlayer then
+            return tycoon
+        end
+    end
+    return nil
+end
+
+local function getPlayerRebirths()
+    local player = game.Players.LocalPlayer
+    return player:FindFirstChild("leaderstats") and player.leaderstats:FindFirstChild("Rebirths") and player.leaderstats.Rebirths.Value or 0
+end
+
+local function getPlayerMoney()
+    local player = game.Players.LocalPlayer
+    return player:FindFirstChild("leaderstats") and player.leaderstats:FindFirstChild("Cash") and player.leaderstats.Cash.Value or 0
+end
+
+-- ================================
+-- SECTION: AUTO FARM (TELEPORT TO CASH COLLECTOR)
+-- ================================
+local AutoFarmTab = Window:CreateTab("Auto Farm", 4483362458)
+local AutoFarmSection = AutoFarmTab:CreateSection("Teleport to Cash Collector")
+
+local function teleportToCashCollector()
+    local tycoon = getPlayerTycoon()
+    if not tycoon then return end
+    local essentialsFolder = tycoon:FindFirstChild("Essentials")
+    if not essentialsFolder then return end
+    local cashCollector = essentialsFolder:FindFirstChild("CashCollector")
+    if not cashCollector then return end
+    local player = game.Players.LocalPlayer
+    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(cashCollector.Position)
+    end
+end
+
+AutoFarmTab:CreateButton({
+   Name = "Teleport to Cash Collector",
+   Callback = function()
+       teleportToCashCollector()
+   end,
+})
+
+local autoFarmEnabled = false
+AutoFarmTab:CreateToggle({
+   Name = "Enable Auto Farm",
+   CurrentValue = false,
+   Flag = "AutoFarmEnabled",
+   Callback = function(value)
+       autoFarmEnabled = value
+       while autoFarmEnabled do
+           teleportToCashCollector()
+           wait(5)
+       end
+   end,
+})
+
+-- ================================
+-- SECTION: ULTIMATE CUSTOMIZABLE AUTO-BUY
+-- ================================
+local AutoBuyTab = Window:CreateTab("Auto Buy", 4483362458)
+local AutoBuySection = AutoBuyTab:CreateSection("Customizable Auto Buy")
+
+-- Configuration (with defaults)
+local config = {
+    skipGamepasses = true,
+    skipRebirthLocked = true,
+    skipExpensive = true,
+    purchaseDelay = 0.5,
+    teleportHeight = 3,
+    debugMode = true,
+    robuxItems = { -- Your specific Robux items
+        "desert eagle", "50 caliber pistol", "fal heavy", "barrett m82",
+        "speedy humvee", "jltv", "boxer crv", "mk2 helicopter",
+        "us zumwalt", "f-35 lightning", "abramsx tank",
+        "shield health", "mk2 army pack", "destroyer drone",
+        "auto collect", "camo customizer", "speedy oil extractor"
+    }
+}
+
+-- Debug printing function
+local function debugPrint(message)
+    if config.debugMode then
+        warn("[DEBUG] "..message)
+    end
+end
+
+-- Enhanced gamepass detection
+local function isGamepass(itemName)
+    if not config.skipGamepasses then return false end
+    local lowerName = string.lower(itemName)
+    -- Check specific Robux items first
+    for _, robuxItem in pairs(config.robuxItems) do
+        if string.find(lowerName, string.lower(robuxItem)) then
+            return true
+        end
+    end
+    -- General gamepass patterns
+    return string.find(lowerName, "gamepass") or
+           string.find(lowerName, "vip") or
+           string.find(lowerName, "premium") or
+           string.find(lowerName, "robux")
+end
+
+local function buyAllButtons()
+    debugPrint("\n=== AUTO-BUY CYCLE STARTED ===")
+    -- Verify player
+    local player = game.Players.LocalPlayer
+    if not player or not player.Character then
+        debugPrint("❌ Player character not found!")
+        return
+    end
+    local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then
+        debugPrint("❌ No HumanoidRootPart found!")
+        return
+    end
+    -- Get stats
+    local playerRebirths = getPlayerRebirths()
+    local playerMoney = getPlayerMoney()
+    debugPrint("ℹ️ Player Stats - Rebirths: "..playerRebirths..", Cash: $"..playerMoney)
+    -- Find tycoon
+    local tycoon = getPlayerTycoon()
+    if not tycoon then
+        debugPrint("❌ Couldn't find player tycoon!")
+        return
+    end
+    -- Find buttons container
+    local buttonsContainer = tycoon:FindFirstChild("UnpurchasedButtons") or 
+                           tycoon:FindFirstChild("Buttons")
+    if not buttonsContainer then
+        debugPrint("❌ No buttons container found!")
+        return
+    end
+    -- Process buttons
+    for _, button in pairs(buttonsContainer:GetChildren()) do
+        debugPrint("\n🔧 Processing: "..button.Name.." ("..button.ClassName..")")
+        -- Skip non-interactive objects
+        if not (button:IsA("Model") or button:IsA("BasePart")) then
+            debugPrint("⚠️ Skipping - Not interactable")
+            continue
+        end
+        -- Gamepass check
+        if isGamepass(button.Name) then
+            debugPrint("⚠️ SKIPPING GAMEPASS: "..button.Name)
+            continue
+        end
+        -- Rebirth check
+        if config.skipRebirthLocked then
+            local requiredRebirths = tonumber(string.match(button.Name, "(%d+) Rebirths")) or 0
+            if requiredRebirths > playerRebirths then
+                debugPrint("⚠️ Skipping - Needs "..requiredRebirths.." rebirths")
+                continue
+            end
+        end
+        -- Find purchase part
+        local purchasePart = button:FindFirstChild("Part") or
+                           button:FindFirstChild("Button") or
+                           (button:IsA("BasePart") and button)
+        if not purchasePart then
+            debugPrint("❌ No purchase part found!")
+            continue
+        end
+        -- Price check
+        local buttonPrice
+        for _, child in pairs(button:GetDescendants()) do
+            if child:IsA("NumberValue") and (child.Name == "Price" or child.Name == "Value") then
+                buttonPrice = child.Value
+                break
+            end
+        end
+        if config.skipExpensive and buttonPrice and buttonPrice > playerMoney then
+            debugPrint("⚠️ Skipping - Can't afford ($"..buttonPrice..")")
+            continue
+        end
+        -- Purchase process
+        debugPrint("➡️ Teleporting near button...")
+        humanoidRootPart.CFrame = purchasePart.CFrame + Vector3.new(0, config.teleportHeight, -5)
+        wait(0.5)
+        debugPrint("➡️ Moving inside the circle...")
+        humanoidRootPart.CFrame = purchasePart.CFrame + Vector3.new(0, config.teleportHeight, 0)
+        wait(0.5)
+        debugPrint("🛒 Attempting purchase...")
+        firetouchinterest(humanoidRootPart, purchasePart, 0)
+        wait(0.1)
+        firetouchinterest(humanoidRootPart, purchasePart, 1)
+        debugPrint("✅ Purchase attempted")
+        wait(config.purchaseDelay)
+    end
+    debugPrint("\n=== AUTO-BUY CYCLE COMPLETE ===")
+end
+
+-- Create the main toggle
+local autoBuyEnabled = false
+AutoBuyTab:CreateToggle({
+   Name = "Enable Auto Buy",
+   CurrentValue = false,
+   Flag = "AutoBuyEnabled",
+   Callback = function(value)
+       autoBuyEnabled = value
+       if value then
+           Rayfield:Notify({
+               Title = "Auto Buy Started",
+               Content = "Configure your settings below",
+               Duration = 3,
+               Image = 4483362458
+           })
+       end
+       while autoBuyEnabled do
+           buyAllButtons()
+           wait(3)
+       end
+   end,
+})
+
+-- Configuration options
+AutoBuyTab:CreateToggle({
+    Name = "Skip Gamepasses",
+    CurrentValue = config.skipGamepasses,
+    Flag = "SkipGamepasses",
+    Callback = function(value)
+        config.skipGamepasses = value
+    end
+})
+
+AutoBuyTab:CreateToggle({
+    Name = "Skip Rebirth-Locked",
+    CurrentValue = config.skipRebirthLocked,
+    Flag = "SkipRebirthLocked",
+    Callback = function(value)
+        config.skipRebirthLocked = value
+    end
+})
+
+AutoBuyTab:CreateToggle({
+    Name = "Skip Unaffordable",
+    CurrentValue = config.skipExpensive,
+    Flag = "SkipExpensive",
+    Callback = function(value)
+        config.skipExpensive = value
+    end
+})
+
+AutoBuyTab:CreateToggle({
+    Name = "Debug Mode",
+    CurrentValue = config.debugMode,
+    Flag = "DebugMode",
+    Callback = function(value)
+        config.debugMode = value
+    end
+})
+
+AutoBuyTab:CreateSlider({
+    Name = "Purchase Delay",
+    Range = {0.1, 1},
+    Increment = 0.1,
+    Suffix = "seconds",
+    CurrentValue = config.purchaseDelay,
+    Flag = "PurchaseDelay",
+    Callback = function(value)
+        config.purchaseDelay = value
+    end
+})
+
+AutoBuyTab:CreateSlider({
+    Name = "Teleport Height",
+    Range = {1, 5},
+    Increment = 0.5,
+    Suffix = "studs",
+    CurrentValue = config.teleportHeight,
+    Flag = "TeleportHeight",
+    Callback = function(value)
+        config.teleportHeight = value
+    end
+})
+
+-- Custom Robux items list (editable through UI)
+AutoBuyTab:CreateInput({
+    Name = "Custom Robux Items",
+    PlaceholderText = "comma,separated,list",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(text)
+        config.robuxItems = {}
+        for item in string.gmatch(text, "([^,]+)") do
+            table.insert(config.robuxItems, item:lower():gsub("^%s*(.-)%s*$", "%1"))
+        end
+    end,
+})
+
+-- ================================
+-- SECTION: PLAYER CUSTOMIZATION (ANTI-AFK)
+-- ================================
+local PlayerCustomizationTab = Window:CreateTab("Player Customization", 4483362458)
+local PlayerCustomizationSection = PlayerCustomizationTab:CreateSection("Anti-AFK")
+
+local antiAFKEnabled = false
+PlayerCustomizationTab:CreateToggle({
+    Name = "Enable Anti-AFK",
+    CurrentValue = false,
+    Flag = "AntiAFKEnabled",
+    Callback = function(value)
+        antiAFKEnabled = value
+        while antiAFKEnabled do
+            -- Simulate a key press to prevent AFK kick
+            local VirtualUser = game:GetService("VirtualUser")
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+            wait(60) -- Wait 60 seconds before simulating another action
+        end
+    end,
+})
+
+Rayfield:LoadConfiguration()
