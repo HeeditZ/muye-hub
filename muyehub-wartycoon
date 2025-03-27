@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
-    Name = "War Tycoon Pro",
-    LoadingTitle = "Loading Premium Features...",
+    Name = "War Tycoon",
+    LoadingTitle = "Loading the best war-tycoon script....",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "WarTycoonConfig",
