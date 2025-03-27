@@ -1,287 +1,247 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-Rayfield:Notify({
-   Title = "Hello",
-   Content = "Script is in beta stages, may add new settings to the script, stay tuned exploiters",
-   Duration = 10,
-   Image = 140668304583375,
-})
 local Window = Rayfield:CreateWindow({
-   Name = "War-tycoon",
-   LoadingTitle = "Script By notmuye.",
-   LoadingSubtitle = "Enjoy",
-   Theme = "Default",
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = "TycoonSettings",
-      FileName = "TycoonConfig"
-   },
+    Name = "War Tycoon Pro",
+    LoadingTitle = "Loading Premium Features...",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "WarTycoonConfig",
+        FileName = "Settings"
+    },
+    Discord = {
+        Enabled = true,
+        Invite = "https://discord.gg/tG9CNEgvEp",
+        RememberJoins = false
+    },
 })
+
 local function getPlayerTycoon()
     local tycoonFolder = workspace:FindFirstChild("Tycoon")
     if not tycoonFolder then return nil end
     local tycoonsFolder = tycoonFolder:FindFirstChild("Tycoons")
     if not tycoonsFolder then return nil end
     for _, tycoon in pairs(tycoonsFolder:GetChildren()) do
-        local owner = tycoon:FindFirstChild("Owner")
-        if owner and owner.Value == game.Players.LocalPlayer then
+        if tycoon:FindFirstChild("Owner") and tycoon.Owner.Value == game.Players.LocalPlayer then
             return tycoon
         end
     end
     return nil
 end
-local function getPlayerRebirths()
-    local player = game.Players.LocalPlayer
-    return player:FindFirstChild("leaderstats") and player.leaderstats:FindFirstChild("Rebirths") and player.leaderstats.Rebirths.Value or 0
-end
-local function getPlayerMoney()
-    local player = game.Players.LocalPlayer
-    return player:FindFirstChild("leaderstats") and player.leaderstats:FindFirstChild("Cash") and player.leaderstats.Cash.Value or 0
-end
+
 local AutoFarmTab = Window:CreateTab("Auto Farm", 4483362458)
-local AutoFarmSection = AutoFarmTab:CreateSection("Teleport to Cash Collector")
-local function teleportToCashCollector()
+local FarmMoneySection = AutoFarmTab:CreateSection("Farm Money")
+local autoFarmEnabled = false
+
+local function collectMoney(collector)
+    if not collector then return end
+    local chr = game.Players.LocalPlayer.Character
+    if not chr or not chr:FindFirstChild("HumanoidRootPart") then return end
+    local hrp = chr.HumanoidRootPart
+    hrp.CFrame = collector.CFrame * CFrame.new(2, 3, -2)
+    task.wait(0.3)
+    hrp.CFrame = collector.CFrame + Vector3.new(0, 3, 0)
+    task.wait(0.5)
+end
+
+local function autoFarmCycle()
     local tycoon = getPlayerTycoon()
     if not tycoon then return end
-    local essentialsFolder = tycoon:FindFirstChild("Essentials")
-    if not essentialsFolder then return end
-    local cashCollector = essentialsFolder:FindFirstChild("CashCollector")
-    if not cashCollector then return end
-    local player = game.Players.LocalPlayer
-    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        player.Character.HumanoidRootPart.CFrame = CFrame.new(cashCollector.Position)
+    local essentials = tycoon:FindFirstChild("Essentials")
+    if not essentials then return end
+    local mainCollector = essentials:FindFirstChild("CashCollector")
+    if mainCollector then collectMoney(mainCollector) end
+    if tycoon:FindFirstChild("PurchasedObjects") and tycoon.PurchasedObjects:FindFirstChild("Oil Drill 1") then
+        local bunkerCollector = essentials:FindFirstChild("CashCollector2")
+        if bunkerCollector then collectMoney(bunkerCollector) end
     end
 end
-AutoFarmTab:CreateButton({
-   Name = "Teleport to Cash Collector",
-   Callback = function()
-       teleportToCashCollector()
-   end,
-})
-local autoFarmEnabled = false
+
 AutoFarmTab:CreateToggle({
-   Name = "Enable Auto Farm",
-   CurrentValue = false,
-   Flag = "AutoFarmEnabled",
-   Callback = function(value)
-       autoFarmEnabled = value
-       while autoFarmEnabled do
-           teleportToCashCollector()
-           wait(5)
-       end
-   end,
-})
-local AutoBuyTab = Window:CreateTab("Auto Buy", 4483362458)
-local AutoBuySection = AutoBuyTab:CreateSection("Customizable Auto Buy")
-local config = {
-    skipGamepasses = true,
-    skipRebirthLocked = true,
-    skipExpensive = true,
-    purchaseDelay = 0.5,
-    teleportHeight = 3,
-    debugMode = true,
-    robuxItems = { 
-        "desert eagle", "50 caliber pistol", "fal heavy", "barrett m82",
-        "speedy humvee", "jltv", "boxer crv", "mk2 helicopter",
-        "us zumwalt", "f-35 lightning", "abramsx tank",
-        "shield health", "mk2 army pack", "destroyer drone",
-        "auto collect", "camo customizer", "speedy oil extractor"
-    }
-}
-local function debugPrint(message)
-    if config.debugMode then
-        warn("[DEBUG] "..message)
-    end
-end
-local function isGamepass(itemName)
-    if not config.skipGamepasses then return false end
-    local lowerName = string.lower(itemName)
-    for _, robuxItem in pairs(config.robuxItems) do
-        if string.find(lowerName, string.lower(robuxItem)) then
-            return true
-        end
-    end
-    return string.find(lowerName, "gamepass") or
-           string.find(lowerName, "vip") or
-           string.find(lowerName, "premium") or
-           string.find(lowerName, "robux")
-end
-local function buyAllButtons()
-    debugPrint("\n=== AUTO-BUY CYCLE STARTED ===")
-    local player = game.Players.LocalPlayer
-    if not player or not player.Character then
-        debugPrint("❌ Player character not found!")
-        return
-    end
-    local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
-    if not humanoidRootPart then
-        debugPrint("❌ No HumanoidRootPart found!")
-        return
-    end
-    local playerRebirths = getPlayerRebirths()
-    local playerMoney = getPlayerMoney()
-    debugPrint("ℹ️ Player Stats - Rebirths: "..playerRebirths..", Cash: $"..playerMoney)
-    local tycoon = getPlayerTycoon()
-    if not tycoon then
-        debugPrint("❌ Couldn't find player tycoon!")
-        return
-    end
-    local buttonsContainer = tycoon:FindFirstChild("UnpurchasedButtons") or 
-                           tycoon:FindFirstChild("Buttons")
-    if not buttonsContainer then
-        debugPrint("❌ No buttons container found!")
-        return
-    end
-    for _, button in pairs(buttonsContainer:GetChildren()) do
-        debugPrint("\n🔧 Processing: "..button.Name.." ("..button.ClassName..")")
-        if not (button:IsA("Model") or button:IsA("BasePart")) then
-            debugPrint("⚠️ Skipping - Not interactable")
-            continue
-        end
-        if isGamepass(button.Name) then
-            debugPrint("⚠️ SKIPPING GAMEPASS: "..button.Name)
-            continue
-        end
-        if config.skipRebirthLocked then
-            local requiredRebirths = tonumber(string.match(button.Name, "(%d+) Rebirths")) or 0
-            if requiredRebirths > playerRebirths then
-                debugPrint("⚠️ Skipping - Needs "..requiredRebirths.." rebirths")
-                continue
-            end
-        end
-        local purchasePart = button:FindFirstChild("Part") or
-                           button:FindFirstChild("Button") or
-                           (button:IsA("BasePart") and button)
-        if not purchasePart then
-            debugPrint("❌ No purchase part found!")
-            continue
-        end
-        local buttonPrice
-        for _, child in pairs(button:GetDescendants()) do
-            if child:IsA("NumberValue") and (child.Name == "Price" or child.Name == "Value") then
-                buttonPrice = child.Value
-                break
-            end
-        end
-        if config.skipExpensive and buttonPrice and buttonPrice > playerMoney then
-            debugPrint("⚠️ Skipping - Can't afford ($"..buttonPrice..")")
-            continue
-        end
-        debugPrint("➡️ Teleporting near button...")
-        humanoidRootPart.CFrame = purchasePart.CFrame * CFrame.new(0, config.teleportHeight, -5)
-        wait(0.5)
-        debugPrint("➡️ Moving inside the circle...")
-        humanoidRootPart.CFrame = purchasePart.CFrame + Vector3.new(0, config.teleportHeight, 0)
-        wait(0.5)
-        debugPrint("🛒 Attempting purchase...")
-        firetouchinterest(humanoidRootPart, purchasePart, 0)
-        wait(0.1)
-        firetouchinterest(humanoidRootPart, purchasePart, 1)
-        debugPrint("✅ Purchase attempted")
-        wait(config.purchaseDelay)
-    end
-    debugPrint("\n=== AUTO-BUY CYCLE COMPLETE ===")
-end
-local autoBuyEnabled = false
-AutoBuyTab:CreateToggle({
-   Name = "Enable Auto Buy",
-   CurrentValue = false,
-   Flag = "AutoBuyEnabled",
-   Callback = function(value)
-       autoBuyEnabled = value
-       if value then
-           Rayfield:Notify({
-               Title = "Auto Buy Started",
-               Content = "Configure your settings below",
-               Duration = 3,
-               Image = 4483362458
-           })
-       end
-       while autoBuyEnabled do
-           buyAllButtons()
-           wait(3)
-       end
-   end,
-})
-AutoBuyTab:CreateToggle({
-    Name = "Skip Gamepasses",
-    CurrentValue = config.skipGamepasses,
-    Flag = "SkipGamepasses",
+    Name = "Auto-farm Money",
+    CurrentValue = false,
+    Flag = "AutoFarmEnabled",
     Callback = function(value)
-        config.skipGamepasses = value
-    end
-})
-AutoBuyTab:CreateToggle({
-    Name = "Skip Rebirth-Locked",
-    CurrentValue = config.skipRebirthLocked,
-    Flag = "SkipRebirthLocked",
-    Callback = function(value)
-        config.skipRebirthLocked = value
-    end
-})
-AutoBuyTab:CreateToggle({
-    Name = "Skip Unaffordable",
-    CurrentValue = config.skipExpensive,
-    Flag = "SkipExpensive",
-    Callback = function(value)
-        config.skipExpensive = value
-    end
-})
-AutoBuyTab:CreateToggle({
-    Name = "Debug Mode",
-    CurrentValue = config.debugMode,
-    Flag = "DebugMode",
-    Callback = function(value)
-        config.debugMode = value
-    end
-})
-AutoBuyTab:CreateSlider({
-    Name = "Purchase Delay",
-    Range = {0.1, 1},
-    Increment = 0.1,
-    Suffix = "seconds",
-    CurrentValue = config.purchaseDelay,
-    Flag = "PurchaseDelay",
-    Callback = function(value)
-        config.purchaseDelay = value
-    end
-})
-AutoBuyTab:CreateSlider({
-    Name = "Teleport Height",
-    Range = {1, 5},
-    Increment = 0.5,
-    Suffix = "studs",
-    CurrentValue = config.teleportHeight,
-    Flag = "TeleportHeight",
-    Callback = function(value)
-        config.teleportHeight = value
-    end
-})
-AutoBuyTab:CreateInput({
-    Name = "Custom Robux Items",
-    PlaceholderText = "comma,separated,list",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(text)
-        config.robuxItems = {}
-        for item in string.gmatch(text, "([^,]+)") do
-            table.insert(config.robuxItems, item:lower():gsub("^%s*(.-)%s*$", "%1"))
+        autoFarmEnabled = value
+        while autoFarmEnabled do
+            autoFarmCycle()
+            task.wait(5)
         end
     end,
 })
-local PlayerCustomizationTab = Window:CreateTab("Player Customization", 4483362458)
-local PlayerCustomizationSection = PlayerCustomizationTab:CreateSection("Anti-AFK")
-local antiAFKEnabled = false
-PlayerCustomizationTab:CreateToggle({
-    Name = "Enable Anti-AFK",
+
+local AutoBuySection = AutoFarmTab:CreateSection("Auto Buy")
+local autoBuyEnabled = false
+
+local function buyAllButtons()
+    local tycoon = getPlayerTycoon()
+    if not tycoon then return end
+    local chr = game.Players.LocalPlayer.Character
+    if not chr or not chr:FindFirstChild("HumanoidRootPart") then return end
+    local hrp = chr.HumanoidRootPart
+    local buttons = tycoon:FindFirstChild("UnpurchasedButtons") or tycoon:FindFirstChild("Buttons")
+    if not buttons then return end
+    for _, button in pairs(buttons:GetChildren()) do
+        if not autoBuyEnabled then break end
+        if not (button:IsA("Model") or button:IsA("BasePart")) then continue end
+        local part = button:FindFirstChild("Part") or button:FindFirstChild("Button") or (button:IsA("BasePart") and button)
+        if not part then continue end
+        hrp.CFrame = part.CFrame * CFrame.new(1, 3, -3)
+        task.wait(0.3)
+        hrp.CFrame = part.CFrame + Vector3.new(0, 3, 0)
+        task.wait(0.3)
+        firetouchinterest(hrp, part, 0)
+        task.wait(0.1)
+        firetouchinterest(hrp, part, 1)
+        task.wait(0.5)
+    end
+end
+
+AutoFarmTab:CreateToggle({
+    Name = "Auto Buy",
+    CurrentValue = false,
+    Flag = "AutoBuyEnabled",
+    Callback = function(value)
+        autoBuyEnabled = value
+        while autoBuyEnabled do
+            buyAllButtons()
+            task.wait(3)
+        end
+    end,
+})
+
+local PVPTab = Window:CreateTab("PVP", 4483362458)
+local AimbotSection = PVPTab:CreateSection("Aimbot")
+local aimbotConfig = {
+    Enabled = false,
+    TeamCheck = true,
+    FOV = 100,
+    Smoothness = 0.3,
+    TargetPart = "Head"
+}
+
+local function aimAtNearest()
+    if not aimbotConfig.Enabled then return end
+    local cam = workspace.CurrentCamera
+    local localPlayer = game.Players.LocalPlayer
+    local closest, dist = nil, aimbotConfig.FOV
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player ~= localPlayer and player.Character then
+            if aimbotConfig.TeamCheck and player.Team == localPlayer.Team then continue end
+            local target = player.Character:FindFirstChild(aimbotConfig.TargetPart)
+            if target then
+                local pos, onScreen = cam:WorldToViewportPoint(target.Position)
+                if onScreen then
+                    local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(cam.ViewportSize.X/2, cam.ViewportSize.Y/2)).Magnitude
+                    if magnitude < dist then
+                        closest = target
+                        dist = magnitude
+                    end
+                end
+            end
+        end
+    end
+    if closest then
+        local currentPos = cam.CFrame.Position
+        local newLook = (closest.Position - currentPos).Unit
+        local smoothedLook = cam.CFrame.LookVector:Lerp(newLook, aimbotConfig.Smoothness)
+        cam.CFrame = CFrame.new(currentPos, currentPos + smoothedLook)
+    end
+end
+
+PVPTab:CreateToggle({
+    Name = "Enable Aimbot",
+    CurrentValue = false,
+    Flag = "AimbotEnabled",
+    Callback = function(value)
+        aimbotConfig.Enabled = value
+        if value then
+            game:GetService("RunService").RenderStepped:Connect(aimAtNearest)
+        end
+    end
+})
+
+PVPTab:CreateToggle({
+    Name = "Team Check",
+    CurrentValue = aimbotConfig.TeamCheck,
+    Flag = "AimbotTeamCheck",
+    Callback = function(value)
+        aimbotConfig.TeamCheck = value
+    end
+})
+
+PVPTab:CreateSlider({
+    Name = "FOV",
+    Range = {10, 500},
+    Increment = 10,
+    CurrentValue = aimbotConfig.FOV,
+    Flag = "AimbotFOV",
+    Callback = function(value)
+        aimbotConfig.FOV = value
+    end
+})
+
+PVPTab:CreateSlider({
+    Name = "Smoothness",
+    Range = {0.1, 1},
+    Increment = 0.1,
+    CurrentValue = aimbotConfig.Smoothness,
+    Flag = "AimbotSmoothness",
+    Callback = function(value)
+        aimbotConfig.Smoothness = value
+    end
+})
+
+PVPTab:CreateDropdown({
+    Name = "Target Part",
+    Options = {"Head", "HumanoidRootPart", "UpperTorso"},
+    CurrentOption = aimbotConfig.TargetPart,
+    Flag = "AimbotTargetPart",
+    Callback = function(value)
+        aimbotConfig.TargetPart = value
+    end
+})
+
+local PlayerTab = Window:CreateTab("Player", 4483362458)
+local AntiAFKSection = PlayerTab:CreateSection("Anti-AFK")
+
+PlayerTab:CreateToggle({
+    Name = "Anti-AFK",
     CurrentValue = false,
     Flag = "AntiAFKEnabled",
     Callback = function(value)
-        antiAFKEnabled = value
-        while antiAFKEnabled do
-            local VirtualUser = game:GetService("VirtualUser")
-            VirtualUser:CaptureController()
-            VirtualUser:ClickButton2(Vector2.new())
-            wait(60)
+        if value then
+            coroutine.wrap(function()
+                while getgenv().AntiAFKEnabled do
+                    game:GetService("VirtualUser"):CaptureController()
+                    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+                    task.wait(60)
+                end
+            end)()
         end
-    end,
+        getgenv().AntiAFKEnabled = value
+    end
 })
+
+local SpeedSection = PlayerTab:CreateSection("Custom Speed")
+
+PlayerTab:CreateSlider({
+    Name = "Walk Speed",
+    Range = {16, 1000},
+    Increment = 1,
+    CurrentValue = 16,
+    Flag = "WalkSpeed",
+    Callback = function(value)
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.WalkSpeed = value
+        end
+    end
+})
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+    character:WaitForChild("Humanoid")
+    if PlayerTab:GetConfiguration().WalkSpeed then
+        character.Humanoid.WalkSpeed = PlayerTab:GetConfiguration().WalkSpeed
+    end
+end)
+
 Rayfield:LoadConfiguration()
