@@ -8,7 +8,7 @@ local Window = Rayfield:CreateWindow({
         FileName = "Settings"
     },
     Discord = {
-        Enabled = true,
+        Enabled = false,
         Invite = "tG9CNEgvEp",
         RememberJoins = false,
     },
