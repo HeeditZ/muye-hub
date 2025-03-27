@@ -1,0 +1,46 @@
+local supportedGameIds = {4639625707}
+local currentGameId = game.PlaceId
+local isSupported = table.find(supportedGameIds, currentGameId) ~= nil
+
+if isSupported then
+    local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+    local Window = Rayfield:CreateWindow({
+        Name = "War Tycoon Pro",
+        LoadingTitle = "Loading Premium Features...",
+        ConfigurationSaving = {
+            Enabled = true,
+            FolderName = "WarTycoonConfig",
+            FileName = "Settings"
+        },
+        Discord = {
+            Enabled = true, 
+            Invite = "https://discord.gg/tG9CNEgvEp", 
+            RememberJoins = false 
+        },
+    })
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/muyehub-wartycoon"))()
+else
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "❌ Unsupported Game",
+        Text = "This script only works with War Tycoon!",
+        Duration = 10,
+        Button1 = "OK"
+    })
+    
+    task.wait(1)
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Game Detected",
+        Text = "Current Game ID: "..currentGameId,
+        Duration = 10,
+        Button1 = "Close"
+    })
+    
+    warn("Script stopped - Expected Game ID: 4639625707 | Current Game ID: "..currentGameId)
+    
+    if game:GetService("SoundService").RespectFilteringEnabled then
+        local errorSound = Instance.new("Sound")
+        errorSound.SoundId = "rbxassetid://1319978998"
+        errorSound.Parent = game:GetService("SoundService")
+        errorSound:Play()
+    end
+end
