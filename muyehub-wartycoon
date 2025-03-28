@@ -75,7 +75,7 @@ end)
 
 local TeleportTab = Window:CreateTab("Teleport", 4483362458)
 
-local TycoonSection = TeleportTab:CreateSection("Tycoon Teleport")
+local TycoonSection = TeleportTab:CreateSection("Tycoon")
 TeleportTab:CreateButton({
     Name = "Teleport to Tycoon",
     Callback = function()
@@ -97,7 +97,7 @@ TeleportTab:CreateButton({
         else
             Rayfield:Notify({
                 Title = "Error",
-                Content = "Could not find tycoon floor!",
+                Content = "Could not find tycoon",
                 Duration = 5,
                 Image = 4483362458
             })
