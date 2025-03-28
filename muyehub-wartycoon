@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
-    Name = "War Tycoon",
-    LoadingTitle = "Loading the best war-tycoon script....",
+    Name = "Muye-hub",
+    LoadingTitle = "Loading Premium Features...",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "WarTycoonConfig",
@@ -10,38 +10,174 @@ local Window = Rayfield:CreateWindow({
     Discord = {
         Enabled = true,
         Invite = "tG9CNEgvEp",
-        RememberJoins = false,
+        RememberJoins = false
     },
 })
 
 local function getPlayerTycoon()
-    local tycoonFolder = workspace:FindFirstChild("Tycoon")
-    if not tycoonFolder then return nil end
-    local tycoonsFolder = tycoonFolder:FindFirstChild("Tycoons")
-    if not tycoonsFolder then return nil end
-    for _, tycoon in pairs(tycoonsFolder:GetChildren()) do
-        if tycoon:FindFirstChild("Owner") and tycoon.Owner.Value == game.Players.LocalPlayer then
-            return tycoon
+    if workspace:FindFirstChild("Tycoon") and workspace.Tycoon:FindFirstChild("Tycoons") then
+        for _, tycoon in pairs(workspace.Tycoon.Tycoons:GetChildren()) do
+            if tycoon:FindFirstChild("Owner") and tycoon.Owner.Value == game.Players.LocalPlayer then
+                return tycoon
+            end
         end
     end
     return nil
 end
 
+local PlayerTab = Window:CreateTab("Player", 4483362458)
+
+local AntiAFKSection = PlayerTab:CreateSection("Anti-AFK")
+local antiAFKEnabled = false
+PlayerTab:CreateToggle({
+    Name = "Anti-AFK",
+    CurrentValue = false,
+    Flag = "AntiAFKEnabled",
+    Callback = function(value)
+        antiAFKEnabled = value
+        if value then
+            local VirtualUser = game:GetService("VirtualUser")
+            game:GetService("Players").LocalPlayer.Idled:Connect(function()
+                if antiAFKEnabled then
+                    VirtualUser:CaptureController()
+                    VirtualUser:ClickButton2(Vector2.new())
+                end
+            end)
+        end
+    end
+})
+
+local SpeedSection = PlayerTab:CreateSection("Speed")
+local currentWalkSpeed = 16
+local function updateSpeed()
+    local character = game.Players.LocalPlayer.Character
+    if character and character:FindFirstChild("Humanoid") then
+        character.Humanoid.WalkSpeed = currentWalkSpeed
+    end
+end
+PlayerTab:CreateSlider({
+    Name = "Walk Speed",
+    Range = {16, 1000},
+    Increment = 1,
+    CurrentValue = 16,
+    Flag = "WalkSpeed",
+    Callback = function(value)
+        currentWalkSpeed = value
+        updateSpeed()
+    end
+})
+game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+    character:WaitForChild("Humanoid")
+    updateSpeed()
+end)
+
+local TeleportTab = Window:CreateTab("Teleport", 4483362458)
+
+local TycoonSection = TeleportTab:CreateSection("Tycoon Teleport")
+TeleportTab:CreateButton({
+    Name = "Teleport to Tycoon Floor",
+    Callback = function()
+        local tycoon = getPlayerTycoon()
+        if tycoon then
+            local floor = tycoon:FindFirstChild("Floor")
+            if floor and floor:FindFirstChild("FloorOrigin") then
+                local chr = game.Players.LocalPlayer.Character
+                if chr and chr:FindFirstChild("HumanoidRootPart") then
+                    chr.HumanoidRootPart.CFrame = floor.FloorOrigin.CFrame + Vector3.new(0, 3, 0)
+                    Rayfield:Notify({
+                        Title = "Success",
+                        Content = "Teleported to tycoon floor!",
+                        Duration = 3,
+                        Image = 4483362458
+                    })
+                end
+            end
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Could not find tycoon floor!",
+                Duration = 5,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+
+local PlayerSection = TeleportTab:CreateSection("Player Teleport")
+local targetPlayerName = ""
+local teleportLoop = false
+local teleportDelay = 1.0
+TeleportTab:CreateInput({
+    Name = "Player Name",
+    PlaceholderText = "Enter exact username",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text) targetPlayerName = Text end,
+})
+local function teleportToPlayer()
+    if targetPlayerName == "" then return false end
+    local targetPlayer = game.Players:FindFirstChild(targetPlayerName)
+    if not targetPlayer then return false end
+    local chr = game.Players.LocalPlayer.Character
+    if not (chr and chr:FindFirstChild("HumanoidRootPart")) then return false end
+    if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        chr.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
+        return true
+    end
+    return false
+end
+TeleportTab:CreateButton({
+    Name = "Teleport to Player",
+    Callback = function()
+        if teleportToPlayer() then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "Teleported to "..targetPlayerName,
+                Duration = 3,
+                Image = 4483362458
+            })
+        end
+    end,
+})
+TeleportTab:CreateToggle({
+    Name = "Loop Teleport",
+    CurrentValue = false,
+    Flag = "TeleportLoop",
+    Callback = function(Value)
+        teleportLoop = Value
+        if Value then
+            coroutine.wrap(function()
+                while teleportLoop do
+                    pcall(teleportToPlayer)
+                    task.wait(teleportDelay)
+                end
+            end)()
+        end
+    end,
+})
+TeleportTab:CreateSlider({
+    Name = "Loop Delay",
+    Range = {0.5, 5},
+    Increment = 0.1,
+    Suffix = "seconds",
+    CurrentValue = 1.0,
+    Flag = "TeleportDelay",
+    Callback = function(Value) teleportDelay = Value end,
+})
+
 local AutoFarmTab = Window:CreateTab("Auto Farm", 4483362458)
+
 local FarmMoneySection = AutoFarmTab:CreateSection("Farm Money")
 local autoFarmEnabled = false
-
 local function collectMoney(collector)
     if not collector then return end
     local chr = game.Players.LocalPlayer.Character
-    if not chr or not chr:FindFirstChild("HumanoidRootPart") then return end
+    if not (chr and chr:FindFirstChild("HumanoidRootPart")) then return end
     local hrp = chr.HumanoidRootPart
     hrp.CFrame = collector.CFrame * CFrame.new(2, 3, -2)
     task.wait(0.3)
     hrp.CFrame = collector.CFrame + Vector3.new(0, 3, 0)
     task.wait(0.5)
 end
-
 local function autoFarmCycle()
     local tycoon = getPlayerTycoon()
     if not tycoon then return end
@@ -54,7 +190,6 @@ local function autoFarmCycle()
         if bunkerCollector then collectMoney(bunkerCollector) end
     end
 end
-
 AutoFarmTab:CreateToggle({
     Name = "Auto-farm Money",
     CurrentValue = false,
@@ -70,18 +205,16 @@ AutoFarmTab:CreateToggle({
 
 local AutoBuySection = AutoFarmTab:CreateSection("Auto Buy")
 local autoBuyEnabled = false
-
 local function buyAllButtons()
     local tycoon = getPlayerTycoon()
     if not tycoon then return end
     local chr = game.Players.LocalPlayer.Character
-    if not chr or not chr:FindFirstChild("HumanoidRootPart") then return end
+    if not (chr and chr:FindFirstChild("HumanoidRootPart")) then return end
     local hrp = chr.HumanoidRootPart
     local buttons = tycoon:FindFirstChild("UnpurchasedButtons") or tycoon:FindFirstChild("Buttons")
     if not buttons then return end
     for _, button in pairs(buttons:GetChildren()) do
         if not autoBuyEnabled then break end
-        if not (button:IsA("Model") or button:IsA("BasePart")) then continue end
         local part = button:FindFirstChild("Part") or button:FindFirstChild("Button") or (button:IsA("BasePart") and button)
         if not part then continue end
         hrp.CFrame = part.CFrame * CFrame.new(1, 3, -3)
@@ -94,7 +227,6 @@ local function buyAllButtons()
         task.wait(0.5)
     end
 end
-
 AutoFarmTab:CreateToggle({
     Name = "Auto Buy",
     CurrentValue = false,
@@ -108,139 +240,227 @@ AutoFarmTab:CreateToggle({
     end,
 })
 
-local PVPTab = Window:CreateTab("PVP", 4483362458)
-local AimbotSection = PVPTab:CreateSection("Aimbot")
+local AimbotTab = Window:CreateTab("Aimbot", 4483362458)
 local aimbotConfig = {
     Enabled = false,
     TeamCheck = true,
     FOV = 100,
-    Smoothness = 0.3,
+    Smoothness = 0.2,
     TargetPart = "Head"
 }
-
+local aimbotConnection
 local function aimAtNearest()
     if not aimbotConfig.Enabled then return end
-    local cam = workspace.CurrentCamera
     local localPlayer = game.Players.LocalPlayer
-    local closest, dist = nil, aimbotConfig.FOV
+    local camera = workspace.CurrentCamera
+    local mouse = localPlayer:GetMouse()
+    local closestPlayer = nil
+    local shortestDistance = aimbotConfig.FOV
     for _, player in pairs(game.Players:GetPlayers()) do
         if player ~= localPlayer and player.Character then
             if aimbotConfig.TeamCheck and player.Team == localPlayer.Team then continue end
-            local target = player.Character:FindFirstChild(aimbotConfig.TargetPart)
-            if target then
-                local pos, onScreen = cam:WorldToViewportPoint(target.Position)
+            local targetPart = player.Character:FindFirstChild(aimbotConfig.TargetPart)
+            if targetPart then
+                local screenPoint, onScreen = camera:WorldToViewportPoint(targetPart.Position)
                 if onScreen then
-                    local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(cam.ViewportSize.X/2, cam.ViewportSize.Y/2)).Magnitude
-                    if magnitude < dist then
-                        closest = target
-                        dist = magnitude
+                    local distance = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(screenPoint.X, screenPoint.Y)).Magnitude
+                    if distance < shortestDistance then
+                        shortestDistance = distance
+                        closestPlayer = player
                     end
                 end
             end
         end
     end
-    if closest then
-        local currentPos = cam.CFrame.Position
-        local newLook = (closest.Position - currentPos).Unit
-        local smoothedLook = cam.CFrame.LookVector:Lerp(newLook, aimbotConfig.Smoothness)
-        cam.CFrame = CFrame.new(currentPos, currentPos + smoothedLook)
+    if closestPlayer and closestPlayer.Character then
+        local targetPart = closestPlayer.Character:FindFirstChild(aimbotConfig.TargetPart)
+        if targetPart then
+            local cameraPosition = camera.CFrame.Position
+            local targetPosition = targetPart.Position
+            local direction = (targetPosition - cameraPosition).Unit
+            local currentLook = camera.CFrame.LookVector
+            local smoothedLook = currentLook:Lerp(direction, aimbotConfig.Smoothness)
+            camera.CFrame = CFrame.new(cameraPosition, cameraPosition + smoothedLook)
+        end
     end
 end
-
-PVPTab:CreateToggle({
+AimbotTab:CreateToggle({
     Name = "Enable Aimbot",
     CurrentValue = false,
     Flag = "AimbotEnabled",
     Callback = function(value)
         aimbotConfig.Enabled = value
         if value then
-            game:GetService("RunService").RenderStepped:Connect(aimAtNearest)
+            aimbotConnection = game:GetService("RunService").RenderStepped:Connect(aimAtNearest)
+        elseif aimbotConnection then
+            aimbotConnection:Disconnect()
         end
     end
 })
-
-PVPTab:CreateToggle({
+AimbotTab:CreateToggle({
     Name = "Team Check",
     CurrentValue = aimbotConfig.TeamCheck,
     Flag = "AimbotTeamCheck",
-    Callback = function(value)
-        aimbotConfig.TeamCheck = value
-    end
+    Callback = function(value) aimbotConfig.TeamCheck = value end
 })
-
-PVPTab:CreateSlider({
+AimbotTab:CreateSlider({
     Name = "FOV",
     Range = {10, 500},
     Increment = 10,
     CurrentValue = aimbotConfig.FOV,
     Flag = "AimbotFOV",
-    Callback = function(value)
-        aimbotConfig.FOV = value
-    end
+    Callback = function(value) aimbotConfig.FOV = value end
 })
-
-PVPTab:CreateSlider({
+AimbotTab:CreateSlider({
     Name = "Smoothness",
     Range = {0.1, 1},
     Increment = 0.1,
     CurrentValue = aimbotConfig.Smoothness,
     Flag = "AimbotSmoothness",
-    Callback = function(value)
-        aimbotConfig.Smoothness = value
-    end
+    Callback = function(value) aimbotConfig.Smoothness = value end
 })
-
-PVPTab:CreateDropdown({
+AimbotTab:CreateDropdown({
     Name = "Target Part",
     Options = {"Head", "HumanoidRootPart", "UpperTorso"},
     CurrentOption = aimbotConfig.TargetPart,
     Flag = "AimbotTargetPart",
-    Callback = function(value)
-        aimbotConfig.TargetPart = value
-    end
+    Callback = function(value) aimbotConfig.TargetPart = value end
 })
 
-local PlayerTab = Window:CreateTab("Player", 4483362458)
-local AntiAFKSection = PlayerTab:CreateSection("Anti-AFK")
-
-PlayerTab:CreateToggle({
-    Name = "Anti-AFK",
-    CurrentValue = false,
-    Flag = "AntiAFKEnabled",
-    Callback = function(value)
-        if value then
-            coroutine.wrap(function()
-                while getgenv().AntiAFKEnabled do
-                    game:GetService("VirtualUser"):CaptureController()
-                    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
-                    task.wait(60)
+local ESPTab = Window:CreateTab("ESP", 7733960981)
+local espEnabled = false
+local espNamesEnabled = false
+local espHighlights = {}
+local espNameTags = {}
+local function createESP(player)
+    if player == game.Players.LocalPlayer then return end
+    if espHighlights[player] then return end
+    local highlight = Instance.new("Highlight")
+    highlight.Name = player.Name.."_ESP"
+    highlight.FillTransparency = 0.5
+    highlight.OutlineTransparency = 0
+    highlight.FillColor = player.Team and player.TeamColor.Color or Color3.fromRGB(255,0,0)
+    highlight.OutlineColor = Color3.new(0,0,0)
+    espHighlights[player] = highlight
+    local function attachToCharacter(character)
+        if character then
+            highlight.Parent = character
+            highlight.Adornee = character
+        end
+    end
+    if player.Character then attachToCharacter(player.Character) end
+    player.CharacterAdded:Connect(attachToCharacter)
+    player.CharacterRemoving:Connect(function()
+        highlight.Adornee = nil
+        highlight.Parent = nil
+    end)
+end
+local function createNameTag(player)
+    if player == game.Players.LocalPlayer then return end
+    if espNameTags[player] then return end
+    local billboard = Instance.new("BillboardGui")
+    local textLabel = Instance.new("TextLabel")
+    billboard.Name = player.Name.."_NameTag"
+    billboard.AlwaysOnTop = true
+    billboard.Size = UDim2.new(0,200,0,50)
+    billboard.StudsOffset = Vector3.new(0,3,0)
+    textLabel.Size = UDim2.new(1,0,1,0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = player.DisplayName
+    textLabel.TextColor3 = player.Team and player.TeamColor.Color or Color3.fromRGB(255,0,0)
+    textLabel.TextScaled = true
+    textLabel.Font = Enum.Font.GothamBold
+    textLabel.TextStrokeTransparency = 0
+    textLabel.TextStrokeColor3 = Color3.new(0,0,0)
+    textLabel.Parent = billboard
+    espNameTags[player] = billboard
+    local function attachToCharacter(character)
+        if character and character:FindFirstChild("Head") then
+            billboard.Parent = character.Head
+            billboard.Adornee = character.Head
+        end
+    end
+    if player.Character then attachToCharacter(player.Character) end
+    player.CharacterAdded:Connect(attachToCharacter)
+    player.CharacterRemoving:Connect(function()
+        billboard.Adornee = nil
+        billboard.Parent = nil
+    end)
+end
+local function removeESP(player)
+    if espHighlights[player] then
+        espHighlights[player]:Destroy()
+        espHighlights[player] = nil
+    end
+    if espNameTags[player] then
+        espNameTags[player]:Destroy()
+        espNameTags[player] = nil
+    end
+end
+local function updateAllESP()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player ~= game.Players.LocalPlayer then
+            if espEnabled then
+                createESP(player)
+                if espNamesEnabled then
+                    createNameTag(player)
                 end
-            end)()
+            else
+                removeESP(player)
+            end
         end
-        getgenv().AntiAFKEnabled = value
     end
-})
-
-local SpeedSection = PlayerTab:CreateSection("Custom Speed")
-
-PlayerTab:CreateSlider({
-    Name = "Walk Speed",
-    Range = {16, 1000},
-    Increment = 1,
-    CurrentValue = 16,
-    Flag = "WalkSpeed",
+end
+ESPTab:CreateToggle({
+    Name = "Enable ESP",
+    CurrentValue = false,
+    Flag = "ESPEnabled",
     Callback = function(value)
-        local character = game.Players.LocalPlayer.Character
-        if character and character:FindFirstChild("Humanoid") then
-            character.Humanoid.WalkSpeed = value
+        espEnabled = value
+        if value then
+            updateAllESP()
+        else
+            for player in pairs(espHighlights) do
+                removeESP(player)
+            end
         end
     end
 })
+ESPTab:CreateToggle({
+    Name = "Show Player Names",
+    CurrentValue = false,
+    Flag = "ESPNamesEnabled",
+    Callback = function(value)
+        espNamesEnabled = value
+        if value then
+            for _, player in pairs(game.Players:GetPlayers()) do
+                if player ~= game.Players.LocalPlayer and espEnabled then
+                    createNameTag(player)
+                end
+            end
+        else
+            for player in pairs(espNameTags) do
+                removeESP(player)
+            end
+        end
+    end
+})
+game.Players.PlayerAdded:Connect(function(player)
+    if espEnabled then
+        createESP(player)
+        if espNamesEnabled then
+            createNameTag(player)
+        end
+    end
+end)
+game.Players.PlayerRemoving:Connect(function(player)
+    removeESP(player)
+end)
+task.spawn(function() updateAllESP() end)
 
-game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
-    character:WaitForChild("Humanoid")
-    if PlayerTab:GetConfiguration().WalkSpeed then
-        character.Humanoid.WalkSpeed = PlayerTab:GetConfiguration().WalkSpeed
+game:GetService("Players").LocalPlayer.CharacterRemoving:Connect(function()
+    if aimbotConnection then
+        aimbotConnection:Disconnect()
     end
 end)
 
