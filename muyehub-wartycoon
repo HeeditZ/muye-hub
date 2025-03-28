@@ -77,7 +77,7 @@ local TeleportTab = Window:CreateTab("Teleport", 4483362458)
 
 local TycoonSection = TeleportTab:CreateSection("Tycoon Teleport")
 TeleportTab:CreateButton({
-    Name = "Teleport to Tycoon Floor",
+    Name = "Teleport to Tycoon",
     Callback = function()
         local tycoon = getPlayerTycoon()
         if tycoon then
@@ -88,7 +88,7 @@ TeleportTab:CreateButton({
                     chr.HumanoidRootPart.CFrame = floor.FloorOrigin.CFrame + Vector3.new(0, 3, 0)
                     Rayfield:Notify({
                         Title = "Success",
-                        Content = "Teleported to tycoon floor!",
+                        Content = "Teleported to tycoon!",
                         Duration = 3,
                         Image = 4483362458
                     })
