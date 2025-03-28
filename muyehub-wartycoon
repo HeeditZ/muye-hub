@@ -1,7 +1,9 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "Muye-hub",
-    LoadingTitle = "Loading Premium Features...",
+    LoadingTitle = "Muye-hub",
+    LoadingSubtitle = "Best script hub you will ever use....",
+    Theme = "AmberGlow",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "WarTycoonConfig",
