@@ -1,13 +1,17 @@
-local supportedGameIds = {4639625707}
+local supportedGameIds = {4639625707, 9224601490} -- War Tycoon and Fruit Battlegrounds
 local currentGameId = game.PlaceId
 local isSupported = table.find(supportedGameIds, currentGameId) ~= nil
 
 if isSupported then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/muyehub-wartycoon"))()
+    if currentGameId == 4639625707 then -- War Tycoon
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/muyehub-wartycoon"))()
+    elseif currentGameId == 9224601490 then -- Fruit Battlegrounds
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/Fruit%20Battleground%20Obfuscated.txt"))()
+    end
 else
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "❌ Unsupported Game",
-        Text = "This script only works with War Tycoon!",
+        Text = "This script only works with supported games!",
         Duration = 10,
         Button1 = "OK"
     })
@@ -20,7 +24,7 @@ else
         Button1 = "Close"
     })
     
-    warn("Script stopped - Expected Game ID: 4639625707 | Current Game ID: "..currentGameId)
+    warn("Script stopped - Expected Game IDs: 4639625707 or 9224601490 | Current Game ID: "..currentGameId)
     
     if game:GetService("SoundService").RespectFilteringEnabled then
         local errorSound = Instance.new("Sound")
