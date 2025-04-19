@@ -74,6 +74,76 @@
       font-size: 1.2rem;
     }
 
+    /* New Side Tab Styles */
+    .side-tab {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .tab-button {
+      background: var(--main-color);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .tab-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    .tab-menu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--main-color);
+      border-radius: 10px;
+      padding: 60px 20px 20px;
+      width: 200px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      transform: translateX(-100%) scale(0.9);
+      transform-origin: left center;
+      opacity: 0;
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+
+    .tab-menu.open {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+
+    .tab-menu a {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 12px 15px;
+      margin: 5px 0;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      background: rgba(131, 163, 202, 0.1);
+    }
+
+    .tab-menu a:hover {
+      background: var(--main-color);
+      color: #000;
+      transform: translateX(5px);
+    }
+
     header {
       padding: 60px 20px 40px;
       text-align: center;
@@ -339,6 +409,17 @@
     <span>Script copied to clipboard!</span>
   </div>
   
+  <!-- New Side Tab -->
+  <div class="side-tab">
+    <button class="tab-button" id="tabButton">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="tab-menu" id="tabMenu">
+      <a href="vexon-hub.html"><i class="fas fa-cube"></i> Vexon-hub</a>
+      <a href="#"><i class="fas fa-lock"></i> The vault</a>
+    </div>
+  </div>
+  
   <div class="content">
     <header>
       <h1>🔥 MuYe Hub</h1>
@@ -429,6 +510,29 @@
       waveHeight: 15,
       waveSpeed: 0.75,
       zoom: 0.85
+    });
+
+    // Tab toggle functionality
+    const tabButton = document.getElementById('tabButton');
+    const tabMenu = document.getElementById('tabMenu');
+    
+    tabButton.addEventListener('click', () => {
+      tabMenu.classList.toggle('open');
+      
+      // Change icon based on state
+      if (tabMenu.classList.contains('open')) {
+        tabButton.innerHTML = '<i class="fas fa-times"></i>';
+      } else {
+        tabButton.innerHTML = '<i class="fas fa-bars"></i>';
+      }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!tabMenu.contains(e.target) && e.target !== tabButton) {
+        tabMenu.classList.remove('open');
+        tabButton.innerHTML = '<i class="fas fa-bars"></i>';
+      }
     });
 
     function showNotification() {
