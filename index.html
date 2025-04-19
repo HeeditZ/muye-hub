@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MuYe Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.waves.min.js"></script>
   <style>
     :root {
       --main-color: #83A3CA;
       --bg: #0f1117;
       --text: #ffffff;
       --subtext: #c7d2e0;
+      --card-bg: rgba(24, 28, 35, 0.8);
     }
 
     * {
@@ -20,11 +24,54 @@
     }
 
     body {
-      background: var(--bg);
       font-family: 'Poppins', sans-serif;
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    #vanta-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      background: rgba(15, 17, 23, 0.7);
+      min-height: 100vh;
+    }
+
+    /* Custom Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--main-color);
+      color: #000;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transform: translateX(150%);
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 1000;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification i {
+      font-size: 1.2rem;
     }
 
     header {
@@ -36,6 +83,7 @@
     header h1 {
       font-size: 3rem;
       color: var(--main-color);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     }
 
     header p {
@@ -43,6 +91,7 @@
       color: var(--subtext);
       max-width: 700px;
       margin: 20px auto;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
     }
 
     .section {
@@ -52,53 +101,95 @@
       text-align: center;
     }
 
+    .loadstring-container {
+      position: relative;
+      margin: 30px auto;
+      max-width: 500px;
+    }
+
     .loadstring-box {
-      background: #181c23;
+      background: var(--card-bg);
       padding: 15px;
       border-radius: 10px;
       border: 1px solid var(--main-color);
       color: #8aff8a;
       font-family: monospace;
-      overflow-x: auto;
-      margin-bottom: 20px;
+      overflow: hidden;
+      height: 0;
+      opacity: 0;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .loadstring-box.show {
+      height: auto;
+      opacity: 1;
+      margin-bottom: 15px;
     }
 
     .copy-btn {
       background: var(--main-color);
       color: #000;
-      padding: 10px 25px;
+      padding: 12px 30px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(131, 163, 202, 0.3);
     }
 
     .copy-btn:hover {
       background: #6d90bc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(131, 163, 202, 0.4);
+    }
+
+    .copy-btn:active {
+      transform: translateY(0);
+    }
+
+    .copy-btn .icon {
+      margin-right: 8px;
     }
 
     .executors {
-      margin-top: 40px;
+      margin: 40px 0;
+    }
+
+    .executors h2 {
+      color: var(--main-color);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .executor-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
       justify-content: center;
     }
 
-    .executors a {
-      background: #181c23;
+    .executor-grid a {
+      background: var(--card-bg);
       border: 1px solid var(--main-color);
       padding: 12px 20px;
       border-radius: 8px;
       text-decoration: none;
       color: var(--main-color);
-      transition: 0.3s ease;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      backdrop-filter: blur(5px);
     }
 
-    .executors a:hover {
+    .executor-grid a:hover {
       background: var(--main-color);
       color: #000;
+      transform: translateY(-3px);
     }
 
     .features {
@@ -109,6 +200,8 @@
     .features h2 {
       color: var(--main-color);
       margin-bottom: 15px;
+      font-size: 1.5rem;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
     }
 
     .features ul {
@@ -118,6 +211,100 @@
 
     .features li {
       margin-bottom: 10px;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .features li:before {
+      content: "•";
+      color: var(--main-color);
+      position: absolute;
+      left: 0;
+      font-size: 1.2rem;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin: 40px 0;
+      perspective: 1000px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--main-color);
+      border-radius: 10px;
+      padding: 25px;
+      width: 280px;
+      transition: transform 0.5s ease, box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+      backdrop-filter: blur(5px);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(131, 163, 202, 0.1) 0%, rgba(0,0,0,0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card h3 {
+      color: var(--main-color);
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .card p {
+      color: var(--subtext);
+      font-size: 0.95rem;
+      transition: transform 0.3s ease;
+    }
+
+    .discord-btn {
+      display: inline-flex;
+      align-items: center;
+      background: #5865F2;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 20px 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+    }
+
+    .discord-btn:hover {
+      background: #4752C4;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
+    }
+
+    .discord-btn .icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
     }
 
     footer {
@@ -126,70 +313,177 @@
       padding: 20px;
       font-size: 0.9rem;
       color: #777;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
   </style>
 </head>
 <body>
+  <div id="vanta-bg"></div>
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <span>Script copied to clipboard!</span>
+  </div>
+  
+  <div class="content">
+    <header>
+      <h1>🔥 MuYe Hub</h1>
+      <p>🛠️ Optimized Scripts for War Tycoon, TSB, Fruit Battlegrounds & More!</p>
+    </header>
 
-  <header>
-    <h1>🔥 MuYe Hub</h1>
-    <p>🛠️ Optimized Scripts for War Tycoon, TSB, Fruit Battlegrounds & More!</p>
-  </header>
+    <div class="section">
+      <p>MuYe Hub offers smooth, undetected scripts with a user-friendly GUI, making it easy to dominate your favorite Roblox games.</p>
 
-  <div class="section">
-    <p>MuYe Hub offers smooth, undetected scripts with a user-friendly GUI, making it easy to dominate your favorite Roblox games.</p>
+      <div class="loadstring-container">
+        <div class="loadstring-box" id="loadstring">
+          loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/Muye-HUB-games"))()
+        </div>
+        <button class="copy-btn pulse" onclick="copyLoadstring()">
+          <i class="fas fa-copy icon"></i> Copy Script
+        </button>
+      </div>
 
-    <div class="loadstring-box" id="loadstring">
-      loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/Muye-HUB-games"))()
+      <a href="https://discord.gg/tG9CNEgvEp" class="discord-btn" target="_blank">
+        <i class="fab fa-discord icon"></i> Join Our Discord
+      </a>
+
+      <div class="executors">
+        <h2>Supported Executors</h2>
+        <div class="executor-grid">
+          <a href="https://www.xeno.now/" target="_blank">Xeno</a>
+          <a href="https://getsolara.dev/" target="_blank">Solara</a>
+          <a href="https://www.getvelocity.live/" target="_blank">Velocity</a>
+          <a href="https://getswift.gg/" target="_blank">Swift</a>
+          <a href="https://getwave.gg/" target="_blank">Wave</a>
+        </div>
+      </div>
+
+      <div class="cards-container" id="cardsContainer">
+        <div class="card">
+          <h3>🔄 Frequent Updates</h3>
+          <p>Our scripts are regularly updated to ensure compatibility with game patches and to add new features.</p>
+        </div>
+        <div class="card">
+          <h3>⚡ Optimized Performance</h3>
+          <p>Lightweight code designed to minimize lag while delivering maximum functionality.</p>
+        </div>
+        <div class="card">
+          <h3>🎮 Multi-Game Support</h3>
+          <p>Compatible with popular Roblox games including War Tycoon, TSB, and Fruit Battlegrounds.</p>
+        </div>
+      </div>
+
+      <div class="features">
+        <h2>🌟 Key Features</h2>
+        <ul>
+          <li>Clean, intuitive GUI (Easy navigation, no clutter)</li>
+          <li>Frequent Updates (Stay ahead of patches)</li>
+          <li>Lightweight & Efficient (Minimal lag, max performance)</li>
+        </ul>
+      </div>
+
+      <div class="features" style="margin-top: 40px;">
+        <h2>🔓 Access System</h2>
+        <ul>
+          <li>No keys, no hassle – just join our Discord for instant access!</li>
+          <li>Get started:</li>
+          <li>1️⃣ Join our Discord Server</li>
+          <li>2️⃣ Download & inject (Compatible with most executors)</li>
+          <li>3️⃣ Launch the Script & enjoy!</li>
+        </ul>
+      </div>
     </div>
-    <button class="copy-btn" onclick="copyLoadstring()">📋 Copy Loadstring</button>
 
-    <div class="executors">
-      <a href="https://www.xeno.now/" target="_blank">Xeno</a>
-      <a href="https://getsolara.dev/" target="_blank">Solara</a>
-      <a href="https://www.getvelocity.live/" target="_blank">Velocity</a>
-      <a href="https://getswift.gg/" target="_blank">Swift</a>
-      <a href="https://getwave.gg/" target="_blank">Wave</a>
-    </div>
-
-    <div class="features">
-      <h2>🌟 Key Features</h2>
-      <ul>
-        <li>✔ Clean, intuitive GUI (Easy navigation, no clutter)</li>
-        <li>✔ Frequent Updates (Stay ahead of patches)</li>
-        <li>✔ Lightweight & Efficient (Minimal lag, max performance)</li>
-      </ul>
-    </div>
-
-    <div class="features" style="margin-top: 40px;">
-      <h2>🔓 Access System</h2>
-      <ul>
-        <li>🚫 No keys, no hassle – just join our Discord for instant access!</li>
-        <li>📌 Get started:</li>
-        <li>1️⃣ Join our Discord Server</li>
-        <li>2️⃣ Download & inject (Compatible with most executors)</li>
-        <li>3️⃣ Launch the Script & enjoy!</li>
-      </ul>
-    </div>
+    <footer>
+      &copy; 2025 MuYe Hub — Made by HeeditZ | GitHub Pages
+    </footer>
   </div>
 
-  <footer>
-    &copy; 2025 MuYe Hub — Made by HeeditZ | GitHub Pages
-  </footer>
-
   <script>
+    // Initialize Vanta.js waves background
+    VANTA.WAVES({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x83A3CA,
+      shininess: 35,
+      waveHeight: 15,
+      waveSpeed: 0.75,
+      zoom: 0.85
+    });
+
+    function showNotification() {
+      const notification = document.getElementById('notification');
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
     function copyLoadstring() {
       const text = document.getElementById('loadstring').innerText;
       navigator.clipboard.writeText(text).then(() => {
-        alert("✅ Loadstring copied to clipboard!");
+        showNotification();
+        
+        const btn = document.querySelector('.copy-btn');
+        btn.innerHTML = '<i class="fas fa-copy icon"></i> Script Copied!';
+        btn.classList.remove('pulse');
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-copy icon"></i> Copy Script';
+          btn.classList.add('pulse');
+        }, 2000);
       });
     }
-  </script>
 
+    // Enhanced card tilt effect with more noticeable hover
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const cardRect = card.getBoundingClientRect();
+        const x = e.clientX - cardRect.left;
+        const y = e.clientY - cardRect.top;
+        
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
+        
+        const angleX = (y - centerY) / 15; // Increased sensitivity
+        const angleY = (centerX - x) / 15; // Increased sensitivity
+        
+        card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-10px) scale(1.03)`;
+        card.style.boxShadow = `${-angleY * 0.8}px ${angleX * 0.8}px 30px rgba(0, 0, 0, 0.4)`;
+        
+        // More pronounced content tilt
+        const contentTiltX = angleX * -0.3;
+        const contentTiltY = angleY * -0.3;
+        card.querySelector('h3').style.transform = `translateX(${contentTiltY}px) translateY(${contentTiltX}px)`;
+        card.querySelector('p').style.transform = `translateX(${contentTiltY}px) translateY(${contentTiltX}px)`;
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+        card.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
+        card.querySelector('h3').style.transform = 'translateX(0) translateY(0)';
+        card.querySelector('p').style.transform = 'translateX(0) translateY(0)';
+      });
+    });
+  </script>
 </body>
 </html>
