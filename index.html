@@ -3,106 +3,183 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Muye Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <title>MuYe Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    body {
+    :root {
+      --main-color: #83A3CA;
+      --bg: #0f1117;
+      --text: #ffffff;
+      --subtext: #c7d2e0;
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      background: #0d0d0d;
-      color: #0ff;
-      font-family: 'Orbitron', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
       overflow-x: hidden;
     }
 
-    h1 {
+    header {
+      padding: 60px 20px 40px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    header h1 {
       font-size: 3rem;
-      margin-bottom: 0.5em;
-      text-shadow: 0 0 15px #0ff;
+      color: var(--main-color);
     }
 
-    p {
+    header p {
       font-size: 1.2rem;
-      margin-bottom: 2em;
+      color: var(--subtext);
+      max-width: 700px;
+      margin: 20px auto;
     }
 
-    .card {
-      background: rgba(0, 255, 255, 0.05);
-      border: 1px solid #0ff;
-      padding: 20px 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #0ff2;
-      max-width: 700px;
-      animation: fadeInUp 1.2s ease-out;
+    .section {
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: auto;
+      text-align: center;
     }
 
     .loadstring-box {
-      background: #111;
-      border: 1px solid #0ff;
-      color: #0f0;
+      background: #181c23;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid var(--main-color);
+      color: #8aff8a;
       font-family: monospace;
-      padding: 10px;
-      border-radius: 6px;
-      margin: 15px 0;
       overflow-x: auto;
+      margin-bottom: 20px;
     }
 
     .copy-btn {
-      background: #0ff;
+      background: var(--main-color);
       color: #000;
+      padding: 10px 25px;
       border: none;
-      padding: 10px 20px;
       border-radius: 5px;
-      cursor: pointer;
       font-weight: bold;
-      transition: background 0.3s ease;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
     .copy-btn:hover {
-      background: #0cc;
+      background: #6d90bc;
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .executors {
+      margin-top: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .executors a {
+      background: #181c23;
+      border: 1px solid var(--main-color);
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--main-color);
+      transition: 0.3s ease;
+    }
+
+    .executors a:hover {
+      background: var(--main-color);
+      color: #000;
+    }
+
+    .features {
+      text-align: left;
+      margin-top: 40px;
+    }
+
+    .features h2 {
+      color: var(--main-color);
+      margin-bottom: 15px;
+    }
+
+    .features ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .features li {
+      margin-bottom: 10px;
     }
 
     footer {
-      margin-top: 40px;
-      font-size: 0.8rem;
-      opacity: 0.4;
+      text-align: center;
+      margin-top: 60px;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <h1>👾 MUYE HUB</h1>
-  <p>Universal Loadstring for:<br>
-    <strong>The Strongest Battleground</strong>, <strong>War Tycoon</strong>, <strong>Fruit Battlegrounds</strong><br>
-    <em>Natural Disaster Survival (soon)</em>
-  </p>
+  <header>
+    <h1>🔥 MuYe Hub</h1>
+    <p>🛠️ Optimized Scripts for War Tycoon, TSB, Fruit Battlegrounds & More!</p>
+  </header>
 
-  <div class="card">
+  <div class="section">
+    <p>MuYe Hub offers smooth, undetected scripts with a user-friendly GUI, making it easy to dominate your favorite Roblox games.</p>
+
     <div class="loadstring-box" id="loadstring">
       loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/Muye-HUB-games"))()
     </div>
     <button class="copy-btn" onclick="copyLoadstring()">📋 Copy Loadstring</button>
+
+    <div class="executors">
+      <a href="https://www.xeno.now/" target="_blank">Xeno</a>
+      <a href="https://getsolara.dev/" target="_blank">Solara</a>
+      <a href="https://www.getvelocity.live/" target="_blank">Velocity</a>
+      <a href="https://getswift.gg/" target="_blank">Swift</a>
+      <a href="https://getwave.gg/" target="_blank">Wave</a>
+    </div>
+
+    <div class="features">
+      <h2>🌟 Key Features</h2>
+      <ul>
+        <li>✔ Clean, intuitive GUI (Easy navigation, no clutter)</li>
+        <li>✔ Frequent Updates (Stay ahead of patches)</li>
+        <li>✔ Lightweight & Efficient (Minimal lag, max performance)</li>
+      </ul>
+    </div>
+
+    <div class="features" style="margin-top: 40px;">
+      <h2>🔓 Access System</h2>
+      <ul>
+        <li>🚫 No keys, no hassle – just join our Discord for instant access!</li>
+        <li>📌 Get started:</li>
+        <li>1️⃣ Join our Discord Server</li>
+        <li>2️⃣ Download & inject (Compatible with most executors)</li>
+        <li>3️⃣ Launch the Script & enjoy!</li>
+      </ul>
+    </div>
   </div>
 
   <footer>
-    &copy; 2025 Heeditz | GitHub Pages powered
+    &copy; 2025 MuYe Hub — Made by HeeditZ | GitHub Pages
   </footer>
 
   <script>
