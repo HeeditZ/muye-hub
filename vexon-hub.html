@@ -5,50 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vexon Hub | MuYe Hub</title>
   <style>
+    /* ====== Fonts & Reset ====== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #0f1115;
-      color: #d0d0d0;
-      display: flex;
+      background: linear-gradient(-45deg, #1f0e2e, #2e0f3a, #3a0f4f, #1a002c);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      color: #eee;
+      overflow-x: hidden;
     }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50% }
+      50% { background-position: 100% 50% }
+      100% { background-position: 0% 50% }
+    }
+
+    /* ====== Sidebar ====== */
     .sidebar {
-      width: 230px;
-      background-color: #1a1c22;
-      height: 100vh;
-      padding: 25px 20px;
-      display: flex;
-      flex-direction: column;
       position: fixed;
+      left: -250px;
+      top: 0;
+      width: 250px;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      transition: left 0.3s;
+      z-index: 1001;
+      padding: 20px;
     }
+
+    .sidebar.open {
+      left: 0;
+    }
+
     .sidebar h2 {
       color: #83A3CA;
       margin-bottom: 30px;
     }
-    .nav-item {
-      margin: 10px 0;
+
+    .sidebar a {
+      display: block;
+      margin: 12px 0;
       color: #aaa;
       text-decoration: none;
       transition: 0.2s;
     }
-    .nav-item:hover, .active {
+
+    .sidebar a:hover {
       color: #83A3CA;
     }
-    .main {
-      margin-left: 230px;
-      padding: 40px;
-      width: 100%;
-      max-width: 900px;
+
+    /* ====== Blur Overlay ====== */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      z-index: 1000;
     }
-    h1 {
+
+    .overlay.show {
+      display: block;
+    }
+
+    /* ====== Top Nav & Button ====== */
+    .topbar {
+      padding: 20px;
+    }
+
+    .menu-btn {
+      background: none;
+      border: 2px solid #83A3CA;
+      color: #83A3CA;
+      padding: 10px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    /* ====== Main Content ====== */
+    .main {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .section {
+      margin-top: 50px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .card h3 {
       color: #83A3CA;
       margin-bottom: 10px;
     }
-    .section {
-      margin-top: 40px;
-    }
+
     .loadstring-box {
-      background-color: #1e222a;
+      background-color: rgba(131, 163, 202, 0.1);
       padding: 12px;
       border-radius: 8px;
       font-family: monospace;
@@ -56,66 +122,92 @@
       overflow-x: auto;
       user-select: all;
     }
+
     .tag {
       display: inline-block;
-      background-color: #2a2d34;
+      background-color: #2f2f3f;
       color: #83A3CA;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 13px;
-      margin: 4px 6px 0 0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin: 6px 8px 0 0;
     }
+
     a {
       color: #83A3CA;
       text-decoration: none;
     }
+
+    @media (max-width: 768px) {
+      .main {
+        padding: 20px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="sidebar">
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
     <h2>MuYe Hub</h2>
-    <a class="nav-item" href="index.html">Home</a>
-    <a class="nav-item active" href="#">Vexon Hub</a>
-    <a class="nav-item" href="strongest.html">The Strongest Battleground</a>
-    <a class="nav-item" href="fruit.html">Fruit Battlegrounds</a>
-    <a class="nav-item" href="natural.html">Natural Disaster Survival</a>
+    <a href="index.html">Home</a>
+    <a href="#" style="color: #83A3CA;">Vexon Hub</a>
+    <a href="strongest.html">The Strongest Battleground</a>
+    <a href="fruit.html">Fruit Battlegrounds</a>
   </div>
 
-  <div class="main">
-    <h1>Vexon Hub</h1>
-    <p>A custom-made executor hub with powerful automation, supported by MuYe Hub.</p>
+  <!-- Overlay Blur -->
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-    <div class="section">
-      <h2>📜 Loadstring</h2>
-      <div class="loadstring-box">
-        loadstring(game:HttpGet("https://muyehub.xyz/vexon"))()
-      </div>
+  <!-- Topbar -->
+  <div class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()">☰ Menu</button>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <h1 style="color: #83A3CA;">Vexon Hub</h1>
+    <p>Premium script utility for Roblox games, powered by MuYe Hub.</p>
+
+    <div class="section card">
+      <h3>📜 Loadstring</h3>
+      <div class="loadstring-box">loadstring(game:HttpGet("https://muyehub.xyz/vexon"))()</div>
     </div>
 
-    <div class="section">
-      <h2>✨ Features</h2>
+    <div class="section card">
+      <h3>✨ Features</h3>
       <ul>
-        <li>Optimized for speed and stealth execution</li>
-        <li>Auto farm with customizable behavior</li>
-        <li>Advanced targeting (NPCs and players)</li>
-        <li>UI toggles, dropdowns, sliders for full control</li>
-        <li>Debug console for issue tracking</li>
-        <li>Built-in No Stun, Fly, and Aimbot systems</li>
+        <li>Auto farm systems (NPCs, players, low health targets)</li>
+        <li>Aimbot with FOV + smoothing</li>
+        <li>Teleport, No Stun, Fly system</li>
+        <li>Advanced UI with sliders, toggles, dropdowns</li>
+        <li>Built-in debugging tools</li>
       </ul>
     </div>
 
-    <div class="section">
-      <h2>🎮 Supported Games</h2>
-      <span class="tag">The Strongest Battleground</span>
-      <span class="tag">War Tycoon</span>
-      <span class="tag">Fruit Battlegrounds</span>
-      <span class="tag">Natural Disaster Survival</span>
+    <div class="section card">
+      <h3>🎮 Supported Games</h3>
+      <span class="tag">The Strongest Battlegrounds</span>
+      <span class="tag">Build a Boat</span>
+      <span class="tag">Slap Battles</span>
+      <span class="tag">Murder Mystery 2</span>
+      <span class="tag">Rivals (Soon)</span>
     </div>
 
-    <div class="section">
-      <h2>🔗 Join Our Discord</h2>
-      <p>Get help, request features, or chill with us at <a href="https://discord.gg/vexonhub" target="_blank">discord.gg/vexonhub</a>.</p>
+    <div class="section card">
+      <h3>💬 Join Our Discord</h3>
+      <p>Need help or want to contribute? Join us at <a href="https://discord.gg/vexonhub" target="_blank">discord.gg/vexonhub</a></p>
     </div>
   </div>
+
+  <!-- JS -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+  </script>
 </body>
 </html>
