@@ -3,211 +3,468 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vexon Hub | MuYe Hub</title>
+  <title>Vexon Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.waves.min.js"></script>
   <style>
-    /* ====== Fonts & Reset ====== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --main-color: #9b59b6; /* Purple color */
+      --bg: #0f1117;
+      --text: #ffffff;
+      --subtext: #c7d2e0;
+      --card-bg: rgba(24, 28, 35, 0.8);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(-45deg, #1f0e2e, #2e0f3a, #3a0f4f, #1a002c);
-      background-size: 400% 400%;
-      animation: gradient 15s ease infinite;
-      color: #eee;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    @keyframes gradient {
-      0% { background-position: 0% 50% }
-      50% { background-position: 100% 50% }
-      100% { background-position: 0% 50% }
-    }
-
-    /* ====== Sidebar ====== */
-    .sidebar {
+    #vanta-bg {
       position: fixed;
-      left: -250px;
       top: 0;
-      width: 250px;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      transition: left 0.3s;
-      z-index: 1001;
-      padding: 20px;
-    }
-
-    .sidebar.open {
       left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
 
-    .sidebar h2 {
-      color: #83A3CA;
-      margin-bottom: 30px;
+    .content {
+      position: relative;
+      z-index: 1;
+      background: rgba(15, 17, 23, 0.7);
+      min-height: 100vh;
     }
 
-    .sidebar a {
-      display: block;
-      margin: 12px 0;
-      color: #aaa;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-
-    .sidebar a:hover {
-      color: #83A3CA;
-    }
-
-    /* ====== Blur Overlay ====== */
-    .overlay {
+    .back-btn {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px);
-      display: none;
-      z-index: 1000;
-    }
-
-    .overlay.show {
-      display: block;
-    }
-
-    /* ====== Top Nav & Button ====== */
-    .topbar {
-      padding: 20px;
-    }
-
-    .menu-btn {
-      background: none;
-      border: 2px solid #83A3CA;
-      color: #83A3CA;
-      padding: 10px 16px;
-      font-size: 16px;
+      top: 20px;
+      left: 20px;
+      background: var(--main-color);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
       cursor: pointer;
-      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      z-index: 100;
     }
 
-    /* ====== Main Content ====== */
-    .main {
-      padding: 40px 20px;
-      max-width: 1200px;
-      margin: auto;
+    .back-btn:hover {
+      transform: scale(1.1);
+    }
+
+    header {
+      padding: 80px 20px 40px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      color: var(--main-color);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: var(--subtext);
+      max-width: 700px;
+      margin: 20px auto;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
     }
 
     .section {
-      margin-top: 50px;
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: auto;
+      text-align: center;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 25px;
-      margin-bottom: 30px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-
-    .card h3 {
-      color: #83A3CA;
-      margin-bottom: 10px;
+    .loadstring-container {
+      position: relative;
+      margin: 30px auto;
+      max-width: 500px;
     }
 
     .loadstring-box {
-      background-color: rgba(131, 163, 202, 0.1);
-      padding: 12px;
-      border-radius: 8px;
+      background: var(--card-bg);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid var(--main-color);
+      color: #8aff8a;
       font-family: monospace;
-      color: #83A3CA;
-      overflow-x: auto;
-      user-select: all;
+      overflow: hidden;
+      height: 0;
+      opacity: 0;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
     }
 
-    .tag {
+    .loadstring-box.show {
+      height: auto;
+      opacity: 1;
+      margin-bottom: 15px;
+    }
+
+    .copy-btn {
+      background: var(--main-color);
+      color: #000;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+    }
+
+    .copy-btn:hover {
+      background: #8e44ad;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(155, 89, 182, 0.4);
+    }
+
+    .copy-btn:active {
+      transform: translateY(0);
+    }
+
+    .copy-btn .icon {
+      margin-right: 8px;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin: 40px 0;
+      perspective: 1000px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--main-color);
+      border-radius: 10px;
+      padding: 25px;
+      width: 280px;
+      transition: transform 0.5s ease, box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+      backdrop-filter: blur(5px);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(155, 89, 182, 0.1) 0%, rgba(0,0,0,0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card h3 {
+      color: var(--main-color);
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .card p {
+      color: var(--subtext);
+      font-size: 0.95rem;
+      transition: transform 0.3s ease;
+    }
+
+    .features {
+      text-align: left;
+      margin-top: 40px;
+    }
+
+    .features h2 {
+      color: var(--main-color);
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .features ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .features li {
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .features li:before {
+      content: "•";
+      color: var(--main-color);
+      position: absolute;
+      left: 0;
+      font-size: 1.2rem;
+    }
+
+    .game-badge {
       display: inline-block;
-      background-color: #2f2f3f;
-      color: #83A3CA;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 14px;
-      margin: 6px 8px 0 0;
+      padding: 5px 12px;
+      border-radius: 15px;
+      margin: 5px;
+      font-size: 0.85rem;
     }
 
-    a {
-      color: #83A3CA;
+    .working {
+      background: rgba(46, 204, 113, 0.2);
+      border: 1px solid #2ecc71;
+      color: #2ecc71;
+    }
+
+    .soon {
+      background: rgba(241, 196, 15, 0.2);
+      border: 1px solid #f1c40f;
+      color: #f1c40f;
+    }
+
+    .discord-btn {
+      display: inline-flex;
+      align-items: center;
+      background: #5865F2;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
       text-decoration: none;
+      font-weight: bold;
+      margin: 20px 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
     }
 
-    @media (max-width: 768px) {
-      .main {
-        padding: 20px;
-      }
+    .discord-btn:hover {
+      background: #4752C4;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
+    }
+
+    .discord-btn .icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #777;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
     }
   </style>
 </head>
 <body>
+  <div id="vanta-bg"></div>
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <span>Script copied to clipboard!</span>
+  </div>
+  
+  <a href="index.html" class="back-btn">
+    <i class="fas fa-arrow-left"></i>
+  </a>
 
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
-    <h2>MuYe Hub</h2>
-    <a href="index.html">Home</a>
-    <a href="#" style="color: #83A3CA;">Vexon Hub</a>
-    <a href="strongest.html">The Strongest Battleground</a>
-    <a href="fruit.html">Fruit Battlegrounds</a>
+  <div class="content">
+    <header>
+      <h1><i class="fas fa-cube"></i> Vexon Hub</h1>
+      <p>A powerful scripting hub with active community and frequent updates</p>
+    </header>
+
+    <div class="section">
+      <div class="loadstring-container">
+        <div class="loadstring-box show">
+          loadstring(game:HttpGet("https://raw.githubusercontent.com/DiosDi/VexonHub/refs/heads/main/VexonHub"))()
+        </div>
+        <button class="copy-btn pulse" onclick="copyLoadstring()">
+          <i class="fas fa-copy icon"></i> Copy Script
+        </button>
+      </div>
+
+      <a href="https://discord.gg/Xm5sThnfsP" class="discord-btn" target="_blank">
+        <i class="fab fa-discord icon"></i> Join Vexon Community
+      </a>
+
+      <div class="cards-container">
+        <div class="card">
+          <h3><i class="fas fa-users"></i> About Server</h3>
+          <p>A community where you can socialize with other exploiters, get script info, join giveaways, and enjoy relaxed rules.</p>
+        </div>
+        <div class="card">
+          <h3><i class="fas fa-code"></i> About Script</h3>
+          <p>Weekly updates based on user requests, mostly developed by @thevex0n with optimized performance.</p>
+        </div>
+        <div class="card">
+          <h3><i class="fas fa-gamepad"></i> Game Support</h3>
+          <div style="text-align: center; margin-top: 10px;">
+            <span class="game-badge working">The Strongest Battle Grounds</span>
+            <span class="game-badge working">Murder Mystery 2</span>
+            <span class="game-badge working">Build a Boat</span>
+            <span class="game-badge working">Slap Battles</span>
+            <span class="game-badge soon">Rivals (soon)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="features">
+        <h2>🌟 Key Features</h2>
+        <ul>
+          <li>Active community with regular giveaways and events</li>
+          <li>Frequent updates based on user feedback</li>
+          <li>Multiple supported games with more coming soon</li>
+          <li>Relaxed community rules for maximum fun</li>
+        </ul>
+      </div>
+
+      <div class="features" style="margin-top: 40px;">
+        <h2>🔧 How To Use</h2>
+        <ul>
+          <li>1️⃣ Copy the script above</li>
+          <li>2️⃣ Inject with your preferred executor</li>
+          <li>3️⃣ Paste and execute in supported games</li>
+          <li>4️⃣ Join Discord for updates and support</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2025 Vexon Hub — Part of MuYe Network
+    </footer>
   </div>
 
-  <!-- Overlay Blur -->
-  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
-  <!-- Topbar -->
-  <div class="topbar">
-    <button class="menu-btn" onclick="toggleSidebar()">☰ Menu</button>
-  </div>
-
-  <!-- Main -->
-  <div class="main">
-    <h1 style="color: #83A3CA;">Vexon Hub</h1>
-    <p>Premium script utility for Roblox games, powered by MuYe Hub.</p>
-
-    <div class="section card">
-      <h3>📜 Loadstring</h3>
-      <div class="loadstring-box">loadstring(game:HttpGet("https://muyehub.xyz/vexon"))()</div>
-    </div>
-
-    <div class="section card">
-      <h3>✨ Features</h3>
-      <ul>
-        <li>Auto farm systems (NPCs, players, low health targets)</li>
-        <li>Aimbot with FOV + smoothing</li>
-        <li>Teleport, No Stun, Fly system</li>
-        <li>Advanced UI with sliders, toggles, dropdowns</li>
-        <li>Built-in debugging tools</li>
-      </ul>
-    </div>
-
-    <div class="section card">
-      <h3>🎮 Supported Games</h3>
-      <span class="tag">The Strongest Battlegrounds</span>
-      <span class="tag">Build a Boat</span>
-      <span class="tag">Slap Battles</span>
-      <span class="tag">Murder Mystery 2</span>
-      <span class="tag">Rivals (Soon)</span>
-    </div>
-
-    <div class="section card">
-      <h3>💬 Join Our Discord</h3>
-      <p>Need help or want to contribute? Join us at <a href="https://discord.gg/vexonhub" target="_blank">discord.gg/vexonhub</a></p>
-    </div>
-  </div>
-
-  <!-- JS -->
   <script>
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('overlay');
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('show');
+    // Initialize Vanta.js waves background with purple color
+    VANTA.WAVES({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x9b59b6,
+      shininess: 35,
+      waveHeight: 15,
+      waveSpeed: 0.75,
+      zoom: 0.85
+    });
+
+    function showNotification() {
+      const notification = document.getElementById('notification');
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
     }
+
+    function copyLoadstring() {
+      const text = document.querySelector('.loadstring-box').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showNotification();
+        
+        const btn = document.querySelector('.copy-btn');
+        btn.innerHTML = '<i class="fas fa-copy icon"></i> Script Copied!';
+        btn.classList.remove('pulse');
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-copy icon"></i> Copy Script';
+          btn.classList.add('pulse');
+        }, 2000);
+      });
+    }
+
+    // Card tilt effect
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const cardRect = card.getBoundingClientRect();
+        const x = e.clientX - cardRect.left;
+        const y = e.clientY - cardRect.top;
+        
+        const centerX = cardRect.width / 2;
+        const centerY = cardRect.height / 2;
+        
+        const angleX = (y - centerY) / 15;
+        const angleY = (centerX - x) / 15;
+        
+        card.style.transform = perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-10px) scale(1.03);
+        card.style.boxShadow = ${-angleY * 0.8}px ${angleX * 0.8}px 30px rgba(0, 0, 0, 0.4);
+        
+        const contentTiltX = angleX * -0.3;
+        const contentTiltY = angleY * -0.3;
+        card.querySelector('h3').style.transform = translateX(${contentTiltY}px) translateY(${contentTiltX}px);
+        card.querySelector('p').style.transform = translateX(${contentTiltY}px) translateY(${contentTiltX}px);
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+        card.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
+        card.querySelector('h3').style.transform = 'translateX(0) translateY(0)';
+        card.querySelector('p').style.transform = 'translateX(0) translateY(0)';
+      });
+    });
   </script>
 </body>
 </html>
