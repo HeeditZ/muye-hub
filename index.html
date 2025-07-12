@@ -35,9 +35,6 @@
             --text: #1e293b;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         * {
@@ -62,13 +59,16 @@
 
         /* Header */
         header {
-            background: var(--bg-card);
+            background: rgba(26, 29, 41, 0.95);
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
             backdrop-filter: blur(10px);
-            background: rgba(26, 29, 41, 0.8);
+        }
+
+        [data-theme="light"] header {
+            background: rgba(248, 250, 252, 0.95);
         }
 
         .header-content {
@@ -119,6 +119,11 @@
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .theme-toggle:hover {
@@ -171,11 +176,13 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 1rem;
         }
 
         .btn-primary {
             background: var(--gradient);
             color: white;
+            box-shadow: var(--shadow);
         }
 
         .btn-primary:hover {
@@ -195,39 +202,38 @@
             border-color: var(--primary);
         }
 
-        /* Script Section */
-        .script-section {
-            padding: 4rem 0;
-        }
-
-        .script-box {
+        /* Quick Script Section */
+        .quick-script {
+            padding: 3rem 0;
             background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
         }
 
-        .script-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--gradient);
+        .quick-script-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
         }
 
-        .script-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .quick-script h2 {
+            font-size: 2rem;
             margin-bottom: 1rem;
+            color: var(--text);
         }
 
-        .script-code {
+        .quick-script p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .script-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hidden-script {
+            display: none;
             background: var(--bg-dark);
             border: 1px solid var(--border);
             border-radius: 0.5rem;
@@ -237,6 +243,8 @@
             font-size: 0.9rem;
             position: relative;
             overflow-x: auto;
+            margin-top: 1rem;
+            text-align: left;
         }
 
         .copy-btn {
@@ -250,14 +258,15 @@
             padding: 0.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 0.8rem;
         }
 
         .copy-btn:hover {
             background: var(--primary-hover);
         }
 
-        /* Categories */
-        .categories {
+        /* Executors */
+        .executors {
             padding: 4rem 0;
         }
 
@@ -269,178 +278,60 @@
             color: var(--text);
         }
 
-        .category-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .script-grid {
+        .executor-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
         }
 
-        .script-card {
+        .executor-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 1rem;
-            padding: 1.5rem;
+            padding: 2rem;
+            text-align: center;
             transition: all 0.3s ease;
-            cursor: pointer;
             position: relative;
             overflow: hidden;
         }
 
-        .script-card:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .script-card::before {
+        .executor-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, var(--primary), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
         }
 
-        .script-card:hover::before {
-            opacity: 0.1;
-            animation: rotate 2s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .script-card-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .script-card h3 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .script-card p {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-
-        .script-tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-
-        .tag {
-            background: var(--primary);
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .script-actions {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .script-status {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            font-size: 0.8rem;
-        }
-
-        .status-active {
-            color: var(--success);
-        }
-
-        .status-inactive {
-            color: var(--error);
-        }
-
-        /* Executors */
-        .executors {
-            padding: 4rem 0;
-            background: var(--bg-card);
-        }
-
-        .executor-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .executor-card {
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
+        .executor-card:hover::before {
+            transform: scaleX(1);
         }
 
         .executor-card:hover {
+            background: var(--bg-card-hover);
             border-color: var(--primary);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
         }
 
-        .executor-card img {
-            width: 40px;
-            height: 40px;
+        .executor-icon {
+            font-size: 2.5rem;
             margin-bottom: 1rem;
-            border-radius: 0.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .executor-card h4 {
             color: var(--text);
             margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
 
         .executor-card p {
@@ -451,17 +342,46 @@
         /* Features */
         .features {
             padding: 4rem 0;
+            background: var(--bg-card);
         }
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
         .feature-card {
-            text-align: center;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
             padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
         }
 
         .feature-icon {
@@ -481,6 +401,7 @@
             color: var(--text);
             margin-bottom: 1rem;
             font-size: 1.25rem;
+            font-weight: 600;
         }
 
         .feature-card p {
@@ -489,7 +410,7 @@
 
         /* Footer */
         footer {
-            background: var(--bg-card);
+            background: var(--bg-dark);
             border-top: 1px solid var(--border);
             padding: 2rem 0;
             text-align: center;
@@ -517,17 +438,12 @@
                 font-size: 1.1rem;
             }
 
-            .cta-buttons {
+            .cta-buttons, .script-actions {
                 flex-direction: column;
                 align-items: center;
             }
 
-            .category-tabs {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .script-grid {
+            .executor-grid, .feature-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -562,19 +478,33 @@
             background: var(--warning);
         }
 
-        /* Loading States */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s linear infinite;
+        /* Animation keyframes */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -589,7 +519,7 @@
                 <nav>
                     <ul class="nav-menu">
                         <li><a href="#home">Home</a></li>
-                        <li><a href="#scripts">Scripts</a></li>
+                        <li><a href="#script">Script</a></li>
                         <li><a href="#executors">Executors</a></li>
                         <li><a href="#features">Features</a></li>
                     </ul>
@@ -606,7 +536,7 @@
         <section id="home" class="hero">
             <div class="container">
                 <h1>MuYe Hub</h1>
-                <p>Premium Roblox scripts with modern UI, optimized performance, and undetected execution for your favorite games.</p>
+                <p>Premium Roblox script hub with modern UI, optimized performance, and undetected execution for your favorite games.</p>
                 <div class="cta-buttons">
                     <button class="btn btn-primary" onclick="copyMainScript()">
                         <i class="fas fa-copy"></i>
@@ -620,166 +550,27 @@
             </div>
         </section>
 
-        <!-- Script Section -->
-        <section class="script-section">
+        <!-- Quick Script Section -->
+        <section id="script" class="quick-script">
             <div class="container">
-                <div class="script-box">
-                    <div class="script-header">
-                        <h3>Main Script</h3>
-                        <div class="script-status status-active">
-                            <i class="fas fa-circle"></i>
-                            Active
-                        </div>
+                <div class="quick-script-container">
+                    <h2>MuYe Hub Script</h2>
+                    <p>One script to rule them all! Our universal script loader with key system protection.</p>
+                    <div class="script-actions">
+                        <button class="btn btn-primary" onclick="copyMainScript()">
+                            <i class="fas fa-copy"></i>
+                            Copy Script
+                        </button>
+                        <button class="btn btn-secondary" onclick="toggleScript()">
+                            <i class="fas fa-eye"></i>
+                            Show Script
+                        </button>
                     </div>
-                    <div class="script-code">
-                        <span id="mainScript">loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/Muye-HUB-games"))()</span>
+                    <div class="hidden-script" id="hiddenScript">
+                        <span id="mainScript">loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/Loader/refs/heads/main/keysystem.lua"))()</span>
                         <button class="copy-btn" onclick="copyMainScript()">
                             <i class="fas fa-copy"></i>
                         </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Categories -->
-        <section id="scripts" class="categories">
-            <div class="container">
-                <h2 class="section-title">Script Categories</h2>
-                <div class="category-tabs">
-                    <button class="tab-btn active" data-category="all">All Scripts</button>
-                    <button class="tab-btn" data-category="combat">Combat</button>
-                    <button class="tab-btn" data-category="utility">Utility</button>
-                    <button class="tab-btn" data-category="visual">Visual</button>
-                    <button class="tab-btn" data-category="exploit">Exploit</button>
-                </div>
-
-                <div class="tab-content active" id="all">
-                    <div class="script-grid">
-                        <div class="script-card" data-category="combat">
-                            <div class="script-card-content">
-                                <h3>War Tycoon</h3>
-                                <p>Complete script hub for War Tycoon with auto-farming, money hacks, and combat enhancements.</p>
-                                <div class="script-tags">
-                                    <span class="tag">Combat</span>
-                                    <span class="tag">Auto-Farm</span>
-                                </div>
-                                <div class="script-actions">
-                                    <button class="btn btn-primary" onclick="copyScript('war-tycoon')">
-                                        <i class="fas fa-copy"></i>
-                                        Copy
-                                    </button>
-                                    <div class="script-status status-active">
-                                        <i class="fas fa-circle"></i>
-                                        Active
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="script-card" data-category="combat">
-                            <div class="script-card-content">
-                                <h3>The Strongest Battlegrounds</h3>
-                                <p>Advanced combat script with auto-combo, hitbox expander, and movement enhancement.</p>
-                                <div class="script-tags">
-                                    <span class="tag">Combat</span>
-                                    <span class="tag">PvP</span>
-                                </div>
-                                <div class="script-actions">
-                                    <button class="btn btn-primary" onclick="copyScript('tsb')">
-                                        <i class="fas fa-copy"></i>
-                                        Copy
-                                    </button>
-                                    <div class="script-status status-active">
-                                        <i class="fas fa-circle"></i>
-                                        Active
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="script-card" data-category="combat">
-                            <div class="script-card-content">
-                                <h3>Fruit Battlegrounds</h3>
-                                <p>Comprehensive fruit script with auto-farm, fruit detection, and PvP assistance.</p>
-                                <div class="script-tags">
-                                    <span class="tag">Combat</span>
-                                    <span class="tag">Fruit</span>
-                                </div>
-                                <div class="script-actions">
-                                    <button class="btn btn-primary" onclick="copyScript('fruit-bg')">
-                                        <i class="fas fa-copy"></i>
-                                        Copy
-                                    </button>
-                                    <div class="script-status status-active">
-                                        <i class="fas fa-circle"></i>
-                                        Active
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="script-card" data-category="utility">
-                            <div class="script-card-content">
-                                <h3>Universal ESP</h3>
-                                <p>Advanced ESP script that works on most games with player, item, and structure detection.</p>
-                                <div class="script-tags">
-                                    <span class="tag">Visual</span>
-                                    <span class="tag">ESP</span>
-                                </div>
-                                <div class="script-actions">
-                                    <button class="btn btn-primary" onclick="copyScript('universal-esp')">
-                                        <i class="fas fa-copy"></i>
-                                        Copy
-                                    </button>
-                                    <div class="script-status status-active">
-                                        <i class="fas fa-circle"></i>
-                                        Active
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="script-card" data-category="utility">
-                            <div class="script-card-content">
-                                <h3>Fly Script</h3>
-                                <p>Smooth flying script with speed control and anti-detection features.</p>
-                                <div class="script-tags">
-                                    <span class="tag">Movement</span>
-                                    <span class="tag">Utility</span>
-                                </div>
-                                <div class="script-actions">
-                                    <button class="btn btn-primary" onclick="copyScript('fly')">
-                                        <i class="fas fa-copy"></i>
-                                        Copy
-                                    </button>
-                                    <div class="script-status status-active">
-                                        <i class="fas fa-circle"></i>
-                                        Active
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="script-card" data-category="visual">
-                            <div class="script-card-content">
-                                <h3>Aimbot & Silent Aim</h3>
-                                <p>Precise aiming assistance with customizable settings and anti-ban protection.</p>
-                                <div class="script-tags">
-                                    <span class="tag">Aimbot</span>
-                                    <span class="tag">Combat</span>
-                                </div>
-                                <div class="script-actions">
-                                    <button class="btn btn-primary" onclick="copyScript('aimbot')">
-                                        <i class="fas fa-copy"></i>
-                                        Copy
-                                    </button>
-                                    <div class="script-status status-active">
-                                        <i class="fas fa-circle"></i>
-                                        Active
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -790,27 +581,27 @@
             <div class="container">
                 <h2 class="section-title">Supported Executors</h2>
                 <div class="executor-grid">
-                    <div class="executor-card">
+                    <div class="executor-card fade-in">
                         <div class="executor-icon">⚡</div>
                         <h4>Solara</h4>
                         <p>Fast and reliable executor with advanced features</p>
                     </div>
-                    <div class="executor-card">
+                    <div class="executor-card fade-in">
                         <div class="executor-icon">🔥</div>
                         <h4>Wave</h4>
                         <p>Powerful executor with excellent compatibility</p>
                     </div>
-                    <div class="executor-card">
+                    <div class="executor-card fade-in">
                         <div class="executor-icon">⭐</div>
                         <h4>Xeno</h4>
                         <p>Premium executor with advanced security</p>
                     </div>
-                    <div class="executor-card">
+                    <div class="executor-card fade-in">
                         <div class="executor-icon">🚀</div>
                         <h4>Velocity</h4>
                         <p>High-performance executor for demanding scripts</p>
                     </div>
-                    <div class="executor-card">
+                    <div class="executor-card fade-in">
                         <div class="executor-icon">💎</div>
                         <h4>Swift</h4>
                         <p>Lightweight and fast executor</p>
@@ -824,47 +615,47 @@
             <div class="container">
                 <h2 class="section-title">Why Choose MuYe Hub?</h2>
                 <div class="feature-grid">
-                    <div class="feature-card">
+                    <div class="feature-card fade-in">
                         <div class="feature-icon">
                             <i class="fas fa-shield-alt"></i>
                         </div>
                         <h3>Undetected</h3>
                         <p>Advanced anti-detection technology keeps you safe from bans while using our scripts.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card fade-in">
                         <div class="feature-icon">
                             <i class="fas fa-rocket"></i>
                         </div>
                         <h3>High Performance</h3>
                         <p>Optimized code ensures smooth gameplay without lag or performance issues.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card fade-in">
                         <div class="feature-icon">
                             <i class="fas fa-sync-alt"></i>
                         </div>
                         <h3>Regular Updates</h3>
                         <p>Our scripts are constantly updated to work with the latest game versions.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card fade-in">
                         <div class="feature-icon">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
                         <h3>Mobile Friendly</h3>
                         <p>Clean UI that works perfectly on both desktop and mobile devices.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card fade-in">
                         <div class="feature-icon">
                             <i class="fas fa-users"></i>
                         </div>
                         <h3>Community</h3>
                         <p>Join thousands of users in our Discord community for support and updates.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card fade-in">
                         <div class="feature-icon">
                             <i class="fas fa-key"></i>
                         </div>
-                        <h3>No Key System</h3>
-                        <p>No annoying key systems or paywalls - just join our Discord and start using!</p>
+                        <h3>Key System</h3>
+                        <p>Secure key system to protect the script from unauthorized access.</p>
                     </div>
                 </div>
             </div>
@@ -884,54 +675,69 @@
     </div>
 
     <script>
-        // Theme Toggle
+        // Theme Toggle - Fixed Implementation
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         
-        // Check for saved theme preference
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        if (savedTheme === 'light') {
+        // Check for saved theme preference or default to dark
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+        
+        // Apply saved theme on load
+        if (currentTheme === 'light') {
             body.setAttribute('data-theme', 'light');
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+            body.removeAttribute('data-theme');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
         }
 
         themeToggle.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme');
-            if (currentTheme === 'light') {
+            if (body.hasAttribute('data-theme')) {
+                // Switch to dark mode
                 body.removeAttribute('data-theme');
                 themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
                 localStorage.setItem('theme', 'dark');
+                currentTheme = 'dark';
             } else {
+                // Switch to light mode
                 body.setAttribute('data-theme', 'light');
                 themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
                 localStorage.setItem('theme', 'light');
+                currentTheme = 'light';
             }
         });
 
-        // Category Tabs
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const scriptCards = document.querySelectorAll('.script-card');
+        // Main script
+        const mainScript = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/Loader/refs/heads/main/keysystem.lua"))()';
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                // Add active class to clicked button
-                button.classList.add('active');
+        // Script visibility toggle
+        function toggleScript() {
+            const hiddenScript = document.getElementById('hiddenScript');
+            const toggleBtn = document.querySelector('button[onclick="toggleScript()"]');
+            
+            if (hiddenScript.style.display === 'none' || hiddenScript.style.display === '') {
+                hiddenScript.style.display = 'block';
+                toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Script';
+            } else {
+                hiddenScript.style.display = 'none';
+                toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Show Script';
+            }
+        }
 
-                const category = button.getAttribute('data-category');
-                
-                // Show/hide script cards based on category
-                scriptCards.forEach(card => {
-                    if (category === 'all' || card.getAttribute('data-category') === category) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeIn 0.5s ease';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+        // Copy main script function
+        function copyMainScript() {
+            copyToClipboard(mainScript, 'Script copied to clipboard!');
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(text, message) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification(message, 'success');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showNotification('Failed to copy script!', 'error');
             });
-        });
+        }
 
         // Notification System
         function showNotification(message, type = 'success') {
@@ -962,40 +768,6 @@
             }, 3000);
         }
 
-        // Script Data
-        const scripts = {
-            'main': 'loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/Muye-HUB-games"))()',
-            'war-tycoon': 'loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/games/war-tycoon.lua"))()',
-            'tsb': 'loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/games/tsb.lua"))()',
-            'fruit-bg': 'loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/games/fruit-battlegrounds.lua"))()',
-            'universal-esp': 'loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/utils/universal-esp.lua"))()',
-            'fly': 'loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/utils/fly.lua"))()',
-            'aimbot': 'loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/muye-hub/refs/heads/main/utils/aimbot.lua"))()'
-        };
-
-        // Copy Functions
-        function copyMainScript() {
-            copyToClipboard(scripts['main'], 'Main script copied to clipboard!');
-        }
-
-        function copyScript(scriptName) {
-            const script = scripts[scriptName];
-            if (script) {
-                copyToClipboard(script, `${scriptName.toUpperCase()} script copied to clipboard!`);
-            } else {
-                showNotification('Script not found!', 'error');
-            }
-        }
-
-        function copyToClipboard(text, message) {
-            navigator.clipboard.writeText(text).then(() => {
-                showNotification(message, 'success');
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-                showNotification('Failed to copy script!', 'error');
-            });
-        }
-
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1009,38 +781,6 @@
                 }
             });
         });
-
-        // Add fade-in animation styles
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeIn {
-                from { 
-                    opacity: 0; 
-                    transform: translateY(20px); 
-                }
-                to { 
-                    opacity: 1; 
-                    transform: translateY(0); 
-                }
-            }
-            
-            .script-card {
-                animation: fadeIn 0.5s ease;
-            }
-            
-            /* Scroll animations */
-            .fade-in {
-                opacity: 0;
-                transform: translateY(30px);
-                transition: all 0.6s ease;
-            }
-            
-            .fade-in.visible {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        `;
-        document.head.appendChild(style);
 
         // Intersection Observer for scroll animations
         const observerOptions = {
@@ -1056,43 +796,31 @@
             });
         }, observerOptions);
 
-        // Observe elements for scroll animations
+        // Initialize animations on load
         document.addEventListener('DOMContentLoaded', () => {
-            const elementsToAnimate = document.querySelectorAll('.script-card, .feature-card, .executor-card');
+            const elementsToAnimate = document.querySelectorAll('.fade-in');
             elementsToAnimate.forEach(el => {
-                el.classList.add('fade-in');
                 observer.observe(el);
             });
-        });
 
-        // Mobile menu toggle (if needed)
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const navMenu = document.querySelector('.nav-menu');
-
-        if (mobileMenuToggle) {
-            mobileMenuToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-            });
-        }
-
-        // Add some dynamic effects
-        document.addEventListener('DOMContentLoaded', () => {
             // Add hover effects to cards
-            const cards = document.querySelectorAll('.script-card, .executor-card, .feature-card');
+            const cards = document.querySelectorAll('.executor-card, .feature-card');
             
             cards.forEach(card => {
                 card.addEventListener('mouseenter', () => {
-                    card.style.transform = 'translateY(-8px) scale(1.02)';
+                    if (!card.style.transform.includes('translateY')) {
+                        card.style.transform = 'translateY(-5px)';
+                    }
                 });
                 
                 card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'translateY(0) scale(1)';
+                    card.style.transform = 'translateY(0)';
                 });
             });
 
-            // Add pulse effect to CTA buttons
-            const ctaButtons = document.querySelectorAll('.btn-primary');
-            ctaButtons.forEach(button => {
+            // Add pulse effect to primary buttons
+            const primaryButtons = document.querySelectorAll('.btn-primary');
+            primaryButtons.forEach(button => {
                 button.addEventListener('mouseenter', () => {
                     button.style.animation = 'pulse 0.6s ease';
                 });
@@ -1100,32 +828,6 @@
                 button.addEventListener('mouseleave', () => {
                     button.style.animation = '';
                 });
-            });
-        });
-
-        // Add pulse animation
-        const pulseStyle = document.createElement('style');
-        pulseStyle.textContent = `
-            @keyframes pulse {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-                100% { transform: scale(1); }
-            }
-        `;
-        document.head.appendChild(pulseStyle);
-
-        // Track button clicks for analytics (optional)
-        function trackClick(action, label) {
-            console.log(`Action: ${action}, Label: ${label}`);
-            // Add your analytics tracking here if needed
-        }
-
-        // Add click tracking to buttons
-        document.querySelectorAll('button, a').forEach(element => {
-            element.addEventListener('click', (e) => {
-                const action = e.target.textContent.trim();
-                const label = e.target.getAttribute('data-label') || 'button-click';
-                trackClick(action, label);
             });
         });
     </script>
