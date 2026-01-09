@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MuYe Hub - Designed for Power</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             /* Deep Black System */
@@ -468,6 +468,11 @@
             transition: transform 0.3s ease;
         }
 
+        .feature-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
         .feature-card:hover .feature-icon {
             transform: rotate(5deg) scale(1.1);
         }
@@ -510,6 +515,10 @@
             gap: 12px;
         }
 
+        .category-title i {
+            font-size: 1.5rem;
+        }
+
         .executor-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -540,7 +549,7 @@
         }
 
         .executor-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 16px;
         }
 
@@ -789,7 +798,7 @@
             <div class="container">
                 <div class="hero-content">
                     <div class="badge">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="fa-solid fa-shield-halved"></i>
                         Trusted by 2000+ Users
                     </div>
                     <h1>
@@ -802,16 +811,16 @@
                     </p>
                     <div class="cta-buttons">
                         <button class="btn btn-primary" onclick="copyScript()">
-                            <i class="fas fa-copy"></i>
+                            <i class="fa-solid fa-copy"></i>
                             Copy Script
                         </button>
                         <a href="https://discord.gg/tG9CNEgvEp" class="btn btn-secondary" target="_blank">
-                            <i class="fab fa-discord"></i>
+                            <i class="fa-brands fa-discord"></i>
                             Join Discord
                         </a>
                     </div>
                     <div class="scroll-indicator">
-                        <i class="fas fa-chevron-down"></i>
+                        <i class="fa-solid fa-chevron-down"></i>
                     </div>
                 </div>
             </div>
@@ -829,12 +838,12 @@
                             <code id="scriptCode">loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/Loader/refs/heads/main/keysystem.lua"))()</code>
                         </div>
                         <button class="copy-btn" onclick="copyScript()">
-                            <i class="fas fa-copy"></i> Copy
+                            <i class="fa-solid fa-copy"></i> Copy
                         </button>
                     </div>
                     
                     <div class="compatibility-note">
-                        <i class="fas fa-check-circle"></i>
+                        <i class="fa-solid fa-circle-check"></i>
                         <span>Works with Swift, Bunni, Volcano, and more • Updated October 2025</span>
                     </div>
                 </div>
@@ -847,37 +856,49 @@
                 <h2 class="section-title">Why Choose MuYe Hub?</h2>
                 <div class="bento-grid">
                     <div class="feature-card card-large">
-                        <div class="feature-icon icon-orange">⚡</div>
+                        <div class="feature-icon icon-orange">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
                         <h3>Blazing Fast.</h3>
                         <p>Optimized script focused on speed and stability. Quick to load, smooth to run, and made to work reliably across supported games.</p>
                     </div>
                     
                     <div class="feature-card card-medium">
-                        <div class="feature-icon icon-green">🛡️</div>
+                        <div class="feature-icon icon-green">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
                         <h3>Unbreakable.</h3>
                         <p>Advanced script-level protection helps reduce detection risks and keeps execution clean and safe.</p>
                     </div>
                     
                     <div class="feature-card card-small">
-                        <div class="feature-icon icon-purple">🔄</div>
+                        <div class="feature-icon icon-purple">
+                            <i class="fa-solid fa-rotate"></i>
+                        </div>
                         <h3>Updated</h3>
                         <p>Regular updates ensure compatibility with latest game versions.</p>
                     </div>
                     
                     <div class="feature-card card-small">
-                        <div class="feature-icon icon-blue">📱</div>
+                        <div class="feature-icon icon-blue">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
                         <h3>Mobile Ready</h3>
                         <p>Clean UI that works perfectly on all devices and platforms.</p>
                     </div>
                     
                     <div class="feature-card card-small">
-                        <div class="feature-icon icon-purple">👥</div>
+                        <div class="feature-icon icon-purple">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
                         <h3>Community</h3>
                         <p>Join thousands in our Discord for support and updates.</p>
                     </div>
                     
                     <div class="feature-card card-small">
-                        <div class="feature-icon icon-green">🔑</div>
+                        <div class="feature-icon icon-green">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
                         <h3>Secure Keys</h3>
                         <p>Key system used to manage access and keep the script maintained and monetized.</p>
                     </div>
@@ -885,364 +906,364 @@
             </div>
         </section>
 
-<!-- Executors Section -->
-<section id="executors" class="executors">
-    <div class="container">
-        <h2 class="section-title">Supported Executors</h2>
-        
-        <!-- Premium Paid -->
-        <div class="executor-category">
-            <h3 class="category-title">
-                <span>🏆</span> Premium (Paid)
-            </h3>
-            <div class="executor-grid">
-                <div class="executor-card">
-                    <div class="executor-icon">💎</div>
-                    <h4>Sirhurt</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">100%</span>
+        <!-- Executors Section -->
+        <section id="executors" class="executors">
+            <div class="container">
+                <h2 class="section-title">Supported Executors</h2>
+                
+                <!-- Premium Paid -->
+                <div class="executor-category">
+                    <h3 class="category-title">
+                        <i class="fa-solid fa-trophy"></i> Premium (Paid)
+                    </h3>
+                    <div class="executor-grid">
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-gem"></i></div>
+                            <h4>Sirhurt</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">100%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://sirhurt.net/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
                         </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-star"></i></div>
+                            <h4>Seliware</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">100%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://seliware.com/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
                         </div>
                     </div>
-                    <a href="https://sirhurt.net/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
                 </div>
 
-                <div class="executor-card">
-                    <div class="executor-icon">⭐</div>
-                    <h4>Seliware</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">100%</span>
+                <!-- Top Free -->
+                <div class="executor-category">
+                    <h3 class="category-title">
+                        <i class="fa-solid fa-fire"></i> Top Free
+                    </h3>
+                    <div class="executor-grid">
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-rocket"></i></div>
+                            <h4>Swift</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">100%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://getswift.vip/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
                         </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-paw"></i></div>
+                            <h4>Bunni</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">100%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://discord.gg/bunnilol" target="_blank" class="btn btn-primary">
+                                <i class="fa-brands fa-discord"></i> Discord
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-volcano"></i></div>
+                            <h4>Volcano</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">94%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://volcano.wtf/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-cube"></i></div>
+                            <h4>LX63</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">95%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://lx63.xyz/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                            <h4>Valex</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">96%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://valex.io/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-circle"></i></div>
+                            <h4>Xeno</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">40%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">3</span>
+                                </div>
+                            </div>
+                            <a href="https://xeno.onl/" target="_blank" class="btn btn-secondary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-sun"></i></div>
+                            <h4>Solara</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">51%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">3</span>
+                                </div>
+                            </div>
+                            <a href="https://getsolara.dev/" target="_blank" class="btn btn-secondary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
                         </div>
                     </div>
-                    <a href="https://seliware.com/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
+                </div>
+
+                <!-- Mobile -->
+                <div class="executor-category">
+                    <h3 class="category-title">
+                        <i class="fa-solid fa-mobile"></i> Mobile (Android/iOS)
+                    </h3>
+                    <div class="executor-grid">
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-triangle"></i></div>
+                            <h4>Delta</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">100%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://deltaexploits.gg/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
+                            <h4>KRNL</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">100%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://krnl.cat/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-code"></i></div>
+                            <h4>Codex</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">98%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://codex.lol/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-gamepad"></i></div>
+                            <h4>Ronix</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">99%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://ronixstudios.com/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-sparkles"></i></div>
+                            <h4>VegaX</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">98%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://vegax.gg/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MacOS -->
+                <div class="executor-category">
+                    <h3 class="category-title">
+                        <i class="fa-brands fa-apple"></i> MacOS
+                    </h3>
+                    <div class="executor-grid">
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-droplet"></i></div>
+                            <h4>Hydrogen</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">96%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://hydrogen.lat/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+
+                        <div class="executor-card">
+                            <div class="executor-icon"><i class="fa-solid fa-desktop"></i></div>
+                            <h4>Macsploit</h4>
+                            <div class="executor-stats">
+                                <div class="stat">
+                                    <span class="stat-label">UNC</span>
+                                    <span class="stat-value">100%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Level</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+                            <a href="https://www.raptor.fun/" target="_blank" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Top Free -->
-        <div class="executor-category">
-            <h3 class="category-title">
-                <span>⭐</span> Top Free
-            </h3>
-            <div class="executor-grid">
-                <div class="executor-card">
-                    <div class="executor-icon">💎</div>
-                    <h4>Swift</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">100%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
+        <!-- Safety Warning Section -->
+        <section class="safety-warning">
+            <div class="container">
+                <h2 class="section-title">Stay Safe</h2>
+                
+                <div class="warning-box">
+                    <div class="warning-title">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Avoid These Executors
                     </div>
-                    <a href="https://getswift.vip/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">🐰</div>
-                    <h4>Bunni</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">100%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
+                    
+                    <ul class="warning-list">
+                        <li>
+                            <i class="fa-solid fa-xmark"></i>
+                            <strong>Wave</strong> - Confirmed RAT (Remote Access Trojan). DO NOT DOWNLOAD!
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-xmark"></i>
+                            <strong>Zenith</strong> - Discontinued and no longer supported
+                        </li>
+                    </ul>
+                    
+                    <div class="warning-note">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Always download executors from their official websites only. 
+                        Never trust third-party download sites or Discord DMs offering "cracked" versions.
+                        Last updated: October 2025
                     </div>
-                    <a href="https://discord.gg/bunnilol" target="_blank" class="btn btn-primary">
-                        <i class="fab fa-discord"></i> Discord
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">🌋</div>
-                    <h4>Volcano</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">94%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://volcano.wtf/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">🔷</div>
-                    <h4>LX63</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">95%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://lx63.xyz/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">⚡</div>
-                    <h4>Valex</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">96%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://valex.io/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">🔵</div>
-                    <h4>Xeno</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">40%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">3</span>
-                        </div>
-                    </div>
-                    <a href="https://xeno.onl/" target="_blank" class="btn btn-secondary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">☀️</div>
-                    <h4>Solara</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">51%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">3</span>
-                        </div>
-                    </div>
-                    <a href="https://getsolara.dev/" target="_blank" class="btn btn-secondary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
                 </div>
             </div>
-        </div>
-
-        <!-- Mobile -->
-        <div class="executor-category">
-            <h3 class="category-title">
-                <span>📱</span> Mobile (Android/iOS)
-            </h3>
-            <div class="executor-grid">
-                <div class="executor-card">
-                    <div class="executor-icon">🔺</div>
-                    <h4>Delta</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">100%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://deltaexploits.gg/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">🔶</div>
-                    <h4>KRNL</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">100%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://krnl.cat/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">📟</div>
-                    <h4>Codex</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">98%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://codex.lol/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">🎮</div>
-                    <h4>Ronix</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">99%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://ronixstudios.com/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">✨</div>
-                    <h4>VegaX</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">98%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://vegax.gg/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- MacOS -->
-        <div class="executor-category">
-            <h3 class="category-title">
-                <span>🍎</span> MacOS
-            </h3>
-            <div class="executor-grid">
-                <div class="executor-card">
-                    <div class="executor-icon">💧</div>
-                    <h4>Hydrogen</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">96%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://hydrogen.lat/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-
-                <div class="executor-card">
-                    <div class="executor-icon">🖥️</div>
-                    <h4>Macsploit</h4>
-                    <div class="executor-stats">
-                        <div class="stat">
-                            <span class="stat-label">UNC</span>
-                            <span class="stat-value">100%</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Level</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                    <a href="https://www.raptor.fun/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Safety Warning Section -->
-<section class="safety-warning">
-    <div class="container">
-        <h2 class="section-title">Stay Safe</h2>
-        
-        <div class="warning-box">
-            <div class="warning-title">
-                <i class="fas fa-exclamation-triangle"></i>
-                Avoid These Executors
-            </div>
-            
-            <ul class="warning-list">
-                <li>
-                    <i class="fas fa-times-circle"></i>
-                    <strong>Wave</strong> - Confirmed RAT (Remote Access Trojan). DO NOT DOWNLOAD!
-                </li>
-                <li>
-                    <i class="fas fa-times-circle"></i>
-                    <strong>Zenith</strong> - Discontinued and no longer supported
-                </li>
-            </ul>
-            
-            <div class="warning-note">
-                <i class="fas fa-info-circle"></i>
-                Always download executors from their official websites only. 
-                Never trust third-party download sites or Discord DMs offering "cracked" versions.
-                Last updated: October 2025
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
     </main>
 
     <footer>
@@ -1250,14 +1271,14 @@
             <div class="footer-content">
                 <div class="footer-links">
                     <a href="https://discord.gg/tG9CNEgvEp" target="_blank">
-                        <i class="fab fa-discord"></i> Discord
+                        <i class="fa-brands fa-discord"></i> Discord
                     </a>
                     <a href="#home">Home</a>
                     <a href="#script">Script</a>
                     <a href="#executors">Executors</a>
                     <a href="#features">Features</a>
                 </div>
-                <p>&copy; 2025 MuYe Hub. Made with ❤️ by HeeditZ</p>
+                <p>&copy; 2025 MuYe Hub. Made with <i class="fa-solid fa-heart"></i> by HeeditZ</p>
                 <p style="font-size: 0.75rem; margin-top: 8px;">Not affiliated with Roblox Corporation</p>
             </div>
         </div>
@@ -1265,7 +1286,7 @@
 
     <!-- Notification -->
     <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
+        <i class="fa-solid fa-circle-check"></i>
         <span id="notificationText">Script copied to clipboard!</span>
     </div>
 
