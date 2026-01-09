@@ -207,13 +207,14 @@
             animation: fadeInUp 0.6s ease forwards 0.4s;
         }
 
-        .hero h1 .gradient-text {
-            background: linear-gradient(135deg, var(--primary-from), var(--primary-to));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: inline-block;
-        }
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary-from), var(--primary-to));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
 
         .hero .subtitle {
             font-size: 1.25rem;
@@ -696,6 +697,49 @@
         .notification.show {
             transform: translateX(0);
         }
+.trusted-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.trusted-card a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.trusted-card .card-content {
+    transition: filter 0.3s;
+}
+
+.trusted-card .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    background: rgba(0,0,0,0.6); /* semi-transparent dark overlay */
+    opacity: 0;
+    pointer-events: none; /* so the click passes through */
+    transition: opacity 0.3s;
+    text-align: center;
+    padding: 1rem;
+}
+
+.trusted-card:hover .overlay {
+    opacity: 1;
+}
+
+.trusted-card:hover .card-content {
+    filter: blur(3px);
+}
+
 
         /* Animations */
         @keyframes fadeInUp {
@@ -902,6 +946,21 @@
                         <h3>Secure Keys</h3>
                         <p>Key system used to manage access and keep the script maintained and monetized.</p>
                     </div>
+<div class="feature-card card-small trusted-card">
+    <a href="https://discord.gg/vexon" target="_blank">
+        <div class="card-content">
+            <div class="feature-icon icon-orange">
+                <i class="fa-solid fa-star"></i>
+            </div>
+            <h3>Trusted by the Best</h3>
+            <p>Used and recommended by top hubs like Vexon Hub.</p>
+        </div>
+        <div class="overlay">Click to join their Discord</div>
+    </a>
+</div>
+
+
+
                 </div>
             </div>
         </section>
@@ -1234,10 +1293,15 @@
         </section>
 
         <!-- Safety Warning Section -->
-        <section class="safety-warning">
-            <div class="container">
-                <h2 class="section-title">Stay Safe</h2>
-                
+<section class="safety-warning">
+    <div class="container">
+        <div class="safety-message">
+            <h2 style="font-size:3rem;">
+                Your Safety <br>
+                <span class="gradient-text">Matters.</span>
+            </h2>
+        </div>
+    </div>
                 <div class="warning-box">
                     <div class="warning-title">
                         <i class="fa-solid fa-triangle-exclamation"></i>
