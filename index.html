@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <audio id="fartSound" src="https://github.com/HeeditZ/muye-hub/raw/refs/heads/main/fart-with-extra-reverb.mp3" preload="auto"></audio>
     <title>MuYe Hub - Designed for Power</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -1353,6 +1354,7 @@
         <i class="fa-solid fa-circle-check"></i>
         <span id="notificationText">Script copied to clipboard!</span>
     </div>
+    
 
     <script>
         const scriptCode = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/HeeditZ/Loader/refs/heads/main/keysystem.lua"))()';
@@ -1416,6 +1418,34 @@
                 }
             });
         });
+
+        let cheatBuffer = "";
+const CHEAT = "fart";
+const fartSound = document.getElementById("fartSound");
+
+document.addEventListener("keydown", (e) => {
+    if (e.key.length !== 1) return;
+
+    cheatBuffer += e.key.toLowerCase();
+    cheatBuffer = cheatBuffer.slice(-CHEAT.length);
+
+    if (cheatBuffer === CHEAT) {
+        // play sound
+        fartSound.currentTime = 0;
+        fartSound.play();
+
+        // turn background green
+        document.body.style.transition = "background 0.3s ease";
+        document.body.style.background = "#00ff4c";
+
+        // reset after a bit
+        setTimeout(() => {
+            document.body.style.background = "";
+        }, 2500);
+
+        cheatBuffer = "";
+    }
+});
     </script>
 </body>
 </html>
